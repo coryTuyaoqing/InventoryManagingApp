@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">WareHouseManager</string>
+    <string name="app_name">InventoryManagingApp</string>
+    <string name="Log_out">Log Out</string>
+    <string name="Barcode_Scanner">Barcode scanner</string>
+    <string name="Profile">Profile</string>
+    <string name="Search">Search</string>
+    <string name="Mainscreen_infoLabel">Highlighted orders and recent activity</string>
 </resources>

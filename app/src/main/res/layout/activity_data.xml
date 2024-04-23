@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/login_background">
 
     <SearchView
         android:id="@+id/searchView"
@@ -28,6 +29,7 @@
         android:layout_width="148dp"
         android:layout_height="28dp"
         android:text="@string/orderId"
+        android:textColor="@color/main_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="@string/Search"
+        android:textColor="@color/main_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -64,6 +67,8 @@
         android:layout_marginStart="20dp"
         android:layout_marginBottom="20dp"
         android:text="@string/back"
+        android:textColor="@color/main_color"
+        android:backgroundTint="@color/background_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -73,6 +78,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="@string/Search"
+        android:textColor="@color/main_color"
+        android:backgroundTint="@color/background_color"
         app:layout_constraintTop_toBottomOf="@+id/searchView"
         tools:layout_editor_absoluteX="160dp" />
 
@@ -80,6 +87,8 @@
         android:id="@+id/Filter"
         android:layout_width="239dp"
         android:layout_height="27dp"
+        android:textColor="@color/main_color"
+        android:backgroundTint="@color/background_color"
         tools:layout_editor_absoluteX="86dp"
         tools:layout_editor_absoluteY="95dp" />
 

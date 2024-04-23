@@ -12,6 +12,6 @@
     <string name="permission_level_0">0</string>
     <string name="permission_level_1">1</string>
     <string name="permission_level_2">2</string>
-    <string name="StaffName">Name</string>
-    <string name="StaffPermission">Permissions</string>
+    <string name="StaffName">Name:</string>
+    <string name="StaffPermission">Permissions:</string>
 </resources>

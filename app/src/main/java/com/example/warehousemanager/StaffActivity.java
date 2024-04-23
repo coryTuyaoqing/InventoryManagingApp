@@ -26,12 +26,21 @@ public class StaffActivity extends AppCompatActivity {
         row.setLayoutParams(lp);
 
         TextView textView = new TextView(this);
-        textView.setText("Name " + rowCount);
+        textView.setText("Name" + rowCount);
         row.addView(textView);
 
         Spinner spinner = new Spinner(this);
         row.addView(spinner);
 
         tableLayout.addView(row, rowCount++);
+    }
+
+    public void onSaveButtonClick(View view) {
+        //add the code to copy the data to a database
+        System.out.println("save data");
+    }
+
+    public void onBackButtonClick(View view) {
+        finish();
     }
 }

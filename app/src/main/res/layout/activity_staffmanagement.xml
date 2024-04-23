@@ -40,6 +40,7 @@
         app:layout_constraintTop_toBottomOf="@+id/divider">
 
         <TableRow
+            android:id="@+id/row0"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -57,22 +58,40 @@
         </TableRow>
 
         <TableRow
-            android:id="@+id/row1"
+            android:id="@+id/Row1"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/editTextName1"
+            <TextView
+                android:id="@+id/textView10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:text="Name" />
+                android:text="John Doe" />
 
             <Spinner
                 android:id="@+id/spinner1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <EditText
+                android:id="@+id/editTextText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:inputType="text"
+                android:text="@string/StaffName" />
+
+            <Spinner
+                android:id="@+id/spinner3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
         </TableRow>
 
     </TableLayout>

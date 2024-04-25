@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:autofillHints="user name / staff ID"
+            android:autofillHints="Name/ID"
             android:background="@drawable/rounded_corner_rectangle"
             android:hint="Name/ID"
             android:inputType="text"

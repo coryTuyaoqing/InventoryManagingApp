@@ -22,6 +22,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button buttonOpenStaffManager = findViewById(R.id.OpenStaff_button);
+        buttonOpenStaffManager.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, StaffActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
     }
 }

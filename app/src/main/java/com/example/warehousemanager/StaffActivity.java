@@ -1,13 +1,27 @@
 package com.example.warehousemanager;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Spinner;
+import android.widget.Button;
 import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class StaffActivity extends AppCompatActivity {
     private int rowCount = 1;
@@ -17,30 +31,63 @@ public class StaffActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_staffmanagement);
-        tableLayout = findViewById(R.id.tableLayout3);
+        OkHttpClient client = new OkHttpClient();
+        tableLayout = findViewById(R.id.StaffTable);
+        String url = "https://studev.groept.be/api/a23PT308/get_info_Staffs";
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                System.out.println("fail to get staff data");
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String responseData = response.body().string();
+                    System.out.println("success to get staff data: " + responseData);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(StaffActivity.this, "success to get staff data: " + responseData, Toast.LENGTH_LONG).show();
+                        }
+                    });
+                    populateTable(responseData);
+                }
+                else {
+                    System.out.println("fail to get staff data: " + response.code());
+                }
+
+            }
+        });
     }
 
-    public void onAddButtonClick(View view) {
-        TableRow row = new TableRow(this);
-        TableRow.LayoutParams lp = new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT);
-        row.setLayoutParams(lp);
+    public void populateTable(String data) {
+        try {
+            JSONArray jsonArray = new JSONArray(data);
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                String staffName = jsonObject.getString("name");
+                String staffPermission = jsonObject.getString("permission");
+                System.out.println(staffName + staffPermission);
 
-        TextView textView = new TextView(this);
-        textView.setText("Name" + rowCount);
-        row.addView(textView);
-
-        Spinner spinner = new Spinner(this);
-        row.addView(spinner);
-
-        tableLayout.addView(row, rowCount++);
-    }
-
-    public void onSaveButtonClick(View view) {
-        //add the code to copy the data to a database
-        System.out.println("save data");
-    }
-
-    public void onBackButtonClick(View view) {
-        finish();
+//                TableRow row = new TableRow(this);
+//                TextView nameTextView = new TextView(this);
+//                nameTextView.setText(staffName);
+//                TextView permissionTextView = new TextView(this);
+//                permissionTextView.setText(staffPermission);
+//
+//                row.addView(nameTextView);
+//                row.addView(permissionTextView);
+//
+//                tableLayout.addView(row);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

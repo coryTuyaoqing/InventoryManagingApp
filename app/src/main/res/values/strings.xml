@@ -16,4 +16,17 @@
     <string name="StaffPermission">Permissions:</string>
     <string name="ManageStaffTitle">Manage Staff</string>
     <string name="StaffId">ID:</string>
+    <string-array name="types_array">
+        <item>Order</item>
+        <item>Article</item>
+    </string-array>
+    <string-array name="filter_array">
+        <item>ID</item>
+        <item>name</item>
+        <item>size</item>
+        <item>color</item>
+        <item>most articles</item>
+    </string-array>
+
+
 </resources>

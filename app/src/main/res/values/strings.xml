@@ -5,7 +5,7 @@
     <string name="Profile">Profile</string>
     <string name="Search">Search</string>
     <string name="Mainscreen_infoLabel">Highlighted orders and recent activity</string>
-    <string name="orderId">Input order or article ID</string>
+    <string name="orderId">Input filter:</string>
     <string name="back">Back</string>
     <string name="Add">Add</string>
     <string name="Save">Save</string>

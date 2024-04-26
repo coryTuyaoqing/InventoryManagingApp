@@ -77,9 +77,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:backgroundTint="@color/background_color"
+        android:backgroundTint="@color/button_color"
         android:text="@string/Save"
-        android:textColor="@color/main_color"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,6 +91,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginBottom="24dp"
         android:text="@string/back"
+        android:backgroundTint="@color/button_color"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

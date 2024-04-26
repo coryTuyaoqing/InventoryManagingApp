@@ -15,4 +15,5 @@
     <string name="StaffName">Name:</string>
     <string name="StaffPermission">Permissions:</string>
     <string name="ManageStaffTitle">Manage Staff</string>
+    <string name="StaffId">ID:</string>
 </resources>

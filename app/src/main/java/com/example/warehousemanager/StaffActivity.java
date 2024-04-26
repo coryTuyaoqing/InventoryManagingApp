@@ -54,22 +54,20 @@ public class StaffActivity extends AppCompatActivity {
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     String responseData = response.body().string();
-                    System.out.println("success to get staff data: " + responseData);
+                    System.out.println("success to get staff data");
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(StaffActivity.this, "success to get staff data: " + responseData, Toast.LENGTH_LONG).show();
+                            Toast.makeText(StaffActivity.this, "success to get staff data", Toast.LENGTH_LONG).show();
                         }
                     });
                     populateTable(responseData);
                 }
                 else {
-                    System.out.println("fail to get staff data: " + response.code());
+                    System.out.println("fail to get staff data");
                 }
             }
         });
-
-
 
         Button saveButton = findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -92,7 +90,6 @@ public class StaffActivity extends AppCompatActivity {
                 Toast.makeText(StaffActivity.this, "Data saved", Toast.LENGTH_SHORT).show();
             }
         });
-
 
         Button backButton = findViewById(R.id.backButton);
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -145,5 +142,4 @@ public class StaffActivity extends AppCompatActivity {
             e.printStackTrace();
         }
     }
-
 }

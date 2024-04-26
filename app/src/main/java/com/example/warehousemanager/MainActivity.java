@@ -14,6 +14,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button buttonOpenData = findViewById(R.id.Search_button);
+        Button buttonOpenStaffManager = findViewById(R.id.OpenStaff_button);
+        Button btnProfile = findViewById(R.id.Profile_button);
         buttonOpenData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -22,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button buttonOpenStaffManager = findViewById(R.id.OpenStaff_button);
         buttonOpenStaffManager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -31,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
+        btnProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            }
+        });
     }
 }

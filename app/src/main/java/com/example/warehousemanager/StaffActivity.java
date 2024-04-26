@@ -1,12 +1,22 @@
 package com.example.warehousemanager;
+
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Spinner;
+import android.widget.ArrayAdapter;
+import android.view.View;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,7 +30,6 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class StaffActivity extends AppCompatActivity {
-    private int rowCount = 1;
     private TableLayout tableLayout;
 
     @Override
@@ -57,7 +66,40 @@ public class StaffActivity extends AppCompatActivity {
                 else {
                     System.out.println("fail to get staff data: " + response.code());
                 }
+            }
+        });
 
+
+
+        Button saveButton = findViewById(R.id.saveButton);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for (int i = 1; i < tableLayout.getChildCount(); i++)
+                {
+                    TableRow row = (TableRow) tableLayout.getChildAt(i);
+
+                    TextView nameTextView = (TextView) row.getChildAt(0);
+                    Spinner permissionSpinner = (Spinner) row.getChildAt(1);
+
+                    String staffName = nameTextView.getText().toString();
+                    String selectedPermission = (String) permissionSpinner.getSelectedItem();
+                    int permissionIndex = permissionSpinner.getSelectedItemPosition() + 1;
+
+                    //implement code to send staff to Database
+                }
+
+                Toast.makeText(StaffActivity.this, "Data saved", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        Button backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(StaffActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -67,24 +109,37 @@ public class StaffActivity extends AppCompatActivity {
             JSONArray jsonArray = new JSONArray(data);
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
+                int ID = jsonObject.getInt("idStaff");
                 String staffName = jsonObject.getString("name");
-                String staffPermission = jsonObject.getString("permission");
+                int staffPermission = jsonObject.getInt("permission");
 
-                // Create a new TableRow
                 TableRow row = new TableRow(this);
 
-                // Create TextViews for name and permission
+                TextView idTextView = new TextView(this);
                 TextView nameTextView = new TextView(this);
+
+                idTextView.setText(String.valueOf(ID));
                 nameTextView.setText(staffName);
-                TextView permissionTextView = new TextView(this);
-                permissionTextView.setText(staffPermission);
 
-                // Add TextViews to the TableRow
+                TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, 1f);
+                idTextView.setLayoutParams(params);
+                nameTextView.setLayoutParams(params);
+
+                Spinner permissionSpinner = new Spinner(this);
+                ArrayAdapter<String> permissionAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{"Permission 1", "Permission 2", "Permission 3"});
+                permissionSpinner.setAdapter(permissionAdapter);
+                permissionSpinner.setSelection(staffPermission - 1); // Adjust index to match permission values
+
+                row.addView(idTextView);
                 row.addView(nameTextView);
-                row.addView(permissionTextView);
+                row.addView(permissionSpinner);
 
-                // Add the TableRow to the TableLayout
-                tableLayout.addView(row);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        tableLayout.addView(row);
+                    }
+                });
             }
         } catch (JSONException e) {
             e.printStackTrace();

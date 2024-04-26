@@ -1,16 +1,12 @@
 package com.example.warehousemanager;
-
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
+import android.widget.TableRow;
+import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -73,21 +69,26 @@ public class StaffActivity extends AppCompatActivity {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 String staffName = jsonObject.getString("name");
                 String staffPermission = jsonObject.getString("permission");
-                System.out.println(staffName + staffPermission);
 
-//                TableRow row = new TableRow(this);
-//                TextView nameTextView = new TextView(this);
-//                nameTextView.setText(staffName);
-//                TextView permissionTextView = new TextView(this);
-//                permissionTextView.setText(staffPermission);
-//
-//                row.addView(nameTextView);
-//                row.addView(permissionTextView);
-//
-//                tableLayout.addView(row);
+                // Create a new TableRow
+                TableRow row = new TableRow(this);
+
+                // Create TextViews for name and permission
+                TextView nameTextView = new TextView(this);
+                nameTextView.setText(staffName);
+                TextView permissionTextView = new TextView(this);
+                permissionTextView.setText(staffPermission);
+
+                // Add TextViews to the TableRow
+                row.addView(nameTextView);
+                row.addView(permissionTextView);
+
+                // Add the TableRow to the TableLayout
+                tableLayout.addView(row);
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
 }

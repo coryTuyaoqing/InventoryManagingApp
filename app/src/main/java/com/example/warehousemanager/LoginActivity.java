@@ -26,12 +26,19 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity {
-    private final String TAG = "LoginDatabase";
+    private static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        //check if the user already login
+        StaffInfo staffInfo = new StaffInfo(getApplicationContext());
+        if(staffInfo.fileExist()){
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        }
 
         EditText edtTxtNameOrId = findViewById(R.id.login_name);
         EditText edtTxtPassword = findViewById(R.id.login_password);
@@ -82,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                                 newStaff.writeInfo(id, name, permission);
 
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                finish();
                             }
                             else{
                                 Toast.makeText(LoginActivity.this, "Incorrect password", Toast.LENGTH_LONG).show();

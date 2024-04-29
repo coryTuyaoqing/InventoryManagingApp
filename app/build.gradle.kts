@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.warehousemanager"
-        minSdk = 19
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -41,4 +41,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.android.volley:volley:1.2.1")
+    implementation("com.google.android.material:material:1.11.0")
+    implementation("com.google.zxing:core:3.4.1")
+    implementation("com.journeyapps:zxing-android-embedded:4.1.0")
 }

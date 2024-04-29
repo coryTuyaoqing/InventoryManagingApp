@@ -7,15 +7,18 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
+    Button buttonOpenData, buttonOpenStaffManager, btnProfile, btnScanner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button buttonOpenData = findViewById(R.id.Search_button);
-        Button buttonOpenStaffManager = findViewById(R.id.OpenStaff_button);
-        Button btnProfile = findViewById(R.id.Profile_button);
+        buttonOpenData = findViewById(R.id.Search_button);
+        buttonOpenStaffManager = findViewById(R.id.OpenStaff_button);
+        btnProfile = findViewById(R.id.Profile_button);
+        btnScanner = findViewById(R.id.Scanner_button);
+
         buttonOpenData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,6 +39,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            }
+        });
+
+        btnScanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, BarcodeActivity.class));
             }
         });
     }

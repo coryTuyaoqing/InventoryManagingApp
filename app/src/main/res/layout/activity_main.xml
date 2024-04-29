@@ -8,17 +8,6 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/LogOut_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="4dp"
-        android:text="@string/Log_out"
-        android:backgroundTint="@color/button_color"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
         android:id="@+id/Scanner_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -45,10 +34,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="4dp"
-        android:text="@string/Profile"
         android:backgroundTint="@color/button_color"
-        app:layout_constraintEnd_toStartOf="@+id/LogOut_button"
+        android:text="@string/Profile"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
@@ -80,11 +68,11 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="4dp"
         android:text="@string/app_name"
         android:textColor="@color/main_color"
-        app:layout_constraintEnd_toStartOf="@+id/Profile_button"
+        app:layout_constraintStart_toEndOf="@+id/imageView7"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
@@ -121,8 +109,9 @@
         android:layout_marginTop="40dp"
         android:text="@string/Mainscreen_infoLabel"
         android:textColor="@color/main_color"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/OpenStaff_button"
-        tools:layout_editor_absoluteX="75dp"
         tools:ignore="MissingConstraints" />
 
     <ImageView
@@ -130,8 +119,7 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="2dp"
-        app:layout_constraintEnd_toStartOf="@+id/textView4"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/warehouse" />
 
@@ -145,3 +133,5 @@
         app:srcCompat="@drawable/person" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+

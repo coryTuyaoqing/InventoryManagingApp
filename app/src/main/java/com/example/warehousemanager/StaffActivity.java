@@ -160,12 +160,7 @@ public class StaffActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             String responseData = response.body().string();
                             System.out.println("success to save data");
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Toast.makeText(StaffActivity.this, "success to save data", Toast.LENGTH_LONG).show();
-                                }
-                            });
+                            runOnUiThread(() -> Toast.makeText(StaffActivity.this, "success to save data", Toast.LENGTH_LONG).show());
                             populateTable(responseData);
                         }
                         else {

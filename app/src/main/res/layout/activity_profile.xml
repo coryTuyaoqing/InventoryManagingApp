@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ProfileActivity"
-    android:orientation="vertical"
-    android:background="@drawable/login_background">
+    android:gravity="center"
+    android:background="@drawable/main_background">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,12 +14,39 @@
         android:padding="32dp"
         android:gravity="center">
 
+        <ImageView
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:src="@drawable/login_account_circle"
+            android:contentDescription="user_avatar"
+            android:id="@+id/imgProfileAvatar"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="32dp"
-            android:id="@+id/txtProfile"
-            android:text="@string/Profile"/>
+            android:textSize="32sp"
+            android:id="@+id/txtProfileID"
+            android:text=""/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="32sp"
+            android:id="@+id/txtProfilePermission"
+            android:text=""/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="32sp"
+            android:id="@+id/txtProfileName"
+            android:text=""/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:id="@+id/txtProfileEmail"
+            android:text=""/>
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

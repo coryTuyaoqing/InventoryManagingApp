@@ -15,6 +15,7 @@ public class StaffInfo {
     private String staffID;
     private String name;
     private String permission;
+    private String email;
 
     private File staffData;
     private final String TAG = "StaffInfo";
@@ -41,7 +42,7 @@ public class StaffInfo {
         }
     }
 
-    public boolean writeInfo(String staffID, String name, String permission){
+    public boolean writeInfo(String staffID, String name, String permission, String email){
         if(!staffData.exists()){
             return false;
         }
@@ -55,6 +56,7 @@ public class StaffInfo {
                     writer.write(staffID + '\n');
                     writer.write(name  + '\n');
                     writer.write(permission  + '\n');
+                    writer.write(email + '\n');
                     writer.close();
                     return true;
                 } catch (IOException e) {
@@ -80,6 +82,7 @@ public class StaffInfo {
                     staffID = scanner.next();
                     name = scanner.next();
                     permission = scanner.next();
+                    email = scanner.next();
                 }
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
@@ -102,5 +105,9 @@ public class StaffInfo {
 
     public String getPermission() {
         return permission;
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

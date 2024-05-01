@@ -1,43 +1,31 @@
 package com.example.warehousemanager;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import android.view.View;
-import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DataActivity extends AppCompatActivity {
 
     private Spinner typeSpinner;
-    private Spinner filterSpinner;
     private EditText filterInputEditText;
     private Button searchButton;
-    private ScrollView scrollView;
-    private OkHttpClient client;
+    private String[] filterOptions;
+    private ScrollView filterScrollView;
+
+    private List<String> selectedFilters = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,153 +42,69 @@ public class DataActivity extends AppCompatActivity {
         });
 
         typeSpinner = findViewById(R.id.Type);
-        filterSpinner = findViewById(R.id.Filter);
         filterInputEditText = findViewById(R.id.filterInput);
         searchButton = findViewById(R.id.Search_Button);
-        scrollView = findViewById(R.id.data_display);
+        filterScrollView = findViewById(R.id.FilterSelectScroll);
 
-        client = new OkHttpClient();
+        filterOptions = getResources().getStringArray(R.array.filter_array);
 
-        setupSpinner(typeSpinner, R.array.types_array);
+        populateFilters();
 
-        setupSpinner(filterSpinner, R.array.filter_array);
+        ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(this,
+                R.array.types_array, android.R.layout.simple_spinner_item);
+        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        typeSpinner.setAdapter(typeAdapter);
+
+        filterInputEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus && filterInputEditText.getText().toString().equals("Input Keyword")) {
+                    filterInputEditText.setText("");
+                }
+            }
+        });
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String type = typeSpinner.getSelectedItem().toString();
-                String filter = filterSpinner.getSelectedItem().toString();
                 String keyword = filterInputEditText.getText().toString();
 
-                if (keyword.isEmpty()) {
+                if (keyword.isEmpty() || keyword.equals("Input Keyword")) {
                     showToast("Please enter a keyword for the search.");
                     return;
                 }
 
-                performSearch(type, filter, keyword);
+                performSearch(type, keyword);
             }
         });
     }
 
-    private void setupSpinner(Spinner spinner, int arrayResource) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(arrayResource));
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-    }
 
-    private void performSearch(String type, String filter, String keyword) {
-        String baseUrl = "https://studev.groept.be/api/a23PT308/";
-        String endpoint;
+    private void populateFilters() {
+        LinearLayout filterCheckboxContainer = findViewById(R.id.FIlters);
 
-        if (type.equals("Order")) {
-            switch (filter.toLowerCase()) {
-                case "id":
-                    endpoint = "get_order_fromID/" + keyword;
-                    break;
-                case "most articles":
-                    endpoint = "get_order_mostArticles";
-                    break;
-                default:
-                    return;
-            }
-        } else {
-            switch (filter.toLowerCase()) {
-                case "size":
-                    endpoint = "get_article_fromSize/" + keyword;
-                    break;
-                case "color":
-                    endpoint = "get_article_fromColor/" + keyword;
-                    break;
-                case "name":
-                    endpoint = "get_article_fromName/" + keyword;
-                    break;
-                case "id":
-                    endpoint = "get_article_fromID/" + keyword;
-                    break;
-                default:
-                    return;
-            }
-        }
-
-        String url = baseUrl + endpoint;
-
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                e.printStackTrace();
-                showToast("Failed to fetch data");
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    try {
-                        final String responseData = response.body().string();
-                        JSONArray jsonArray = new JSONArray(responseData);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                populateScrollView(jsonArray, type);
-                            }
-                        });
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        showToast("Failed to parse data");
+        for (String filter : filterOptions) {
+            CheckBox checkBox = new CheckBox(this);
+            checkBox.setText(filter);
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    if (isChecked) {
+                        selectedFilters.add(filter);
+                    } else {
+                        selectedFilters.remove(filter);
                     }
-                } else {
-                    showToast("Failed to fetch data");
                 }
-            }
-        });
-    }
-
-    private void populateScrollView(JSONArray jsonArray, String dataType) {
-        scrollView.removeAllViews();
-
-        try {
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                if (dataType.equals("Article")) {
-                    // Extract values for articles
-                    int idArticle = jsonObject.getInt("idArticle");
-                    String name = jsonObject.getString("name");
-                    String color = jsonObject.getString("color");
-                    String size = jsonObject.getString("size");
-
-                    TextView textView = new TextView(this);
-                    // Set the text to display the article details
-                    textView.setText("ID: " + idArticle + "\nName: " + name + "\nColor: " + color + "\nSize: " + size);
-
-                    textView.setPadding(0, 0, 0, 20);
-
-                    scrollView.addView(textView);
-                } else if (dataType.equals("Order")) {
-
-                    int idOrder = jsonObject.getInt("idOrder");
-                    int idArticle = jsonObject.getInt("idArticle");
-                    int articleNr = jsonObject.getInt("ArticleNr");
-
-                    TextView textView = new TextView(this);
-                    textView.setText("Order ID: " + idOrder + "\nArticle ID: " + idArticle + "\nArticle Number: " + articleNr);
-
-                    textView.setPadding(0, 0, 0, 20);
-
-                    scrollView.addView(textView);
-                } else {
-                    showToast("Invalid data type");
-                    return;
-                }
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+            });
+            filterCheckboxContainer.addView(checkBox);
         }
     }
 
+
+    private void performSearch(String type, String keyword) {
+        // Implement your search logic here
+    }
 
     private void showToast(String message) {
         Toast.makeText(DataActivity.this, message, Toast.LENGTH_SHORT).show();

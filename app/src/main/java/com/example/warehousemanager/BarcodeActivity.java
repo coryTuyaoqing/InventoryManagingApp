@@ -25,7 +25,6 @@ public class BarcodeActivity extends AppCompatActivity {
         backBtn = findViewById(R.id.backBtn);
         messageText = findViewById(R.id.textContent);
         messageFormat = findViewById(R.id.textFormat);
-
         scanBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

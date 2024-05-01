@@ -1,60 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/loginStatus"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/main_background">
+    android:background="@drawable/main_background"
+    tools:context=".RegistrationActivity">
 
     <TextView
-        android:id="@+id/txtSignin"
+        android:id="@+id/txtSignup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="156dp"
-        android:layout_marginBottom="96dp"
-        android:text="SIGN IN"
+        android:layout_marginBottom="48dp"
+        android:text="SIGN UP"
         android:textSize="64sp" />
 
+
     <LinearLayout
-        android:id="@+id/linearSignin"
+        android:id="@+id/linearSignup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtSignin"
+        android:layout_below="@+id/txtSignup"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="16dp">
 
         <EditText
-            android:id="@+id/login_name"
+            android:id="@+id/edtTxtSignupName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:autofillHints="Email"
+            android:autofillHints="Your Name"
             android:background="@drawable/rounded_corner_rectangle"
-            android:hint="Email / Staff ID"
-            android:inputType="text"
+            android:hint="Your Name"
             android:padding="16dp"
             android:textColor="@color/main_color"
             android:textColorHint="@color/main_color"
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/login_password"
+            android:id="@+id/edtTxtSignupPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:autofillHints="user name / staff ID"
+            android:autofillHints="Password"
             android:background="@drawable/rounded_corner_rectangle"
-            android:hint="Password"
-            android:inputType="textPassword"
+            android:hint="Password (8 char at least)"
             android:padding="16dp"
             android:textColor="@color/main_color"
             android:textColorHint="@color/main_color"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:inputType="textPassword"/>
+
+        <EditText
+            android:id="@+id/edtTxtSignupPasswordConfirmation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:autofillHints="Password"
+            android:background="@drawable/rounded_corner_rectangle"
+            android:hint="Repeat password"
+            android:padding="16dp"
+            android:textColor="@color/main_color"
+            android:textColorHint="@color/main_color"
+            android:textSize="20sp"
+            android:inputType="textPassword"/>
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/login_button"
+        android:id="@+id/btnSignup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -66,12 +82,12 @@
         android:textSize="28sp" />
 
     <TextView
-        android:id="@+id/sign_up_first"
+        android:id="@+id/txtSignupToSignin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/linearSignin"
+        android:layout_below="@+id/linearSignup"
         android:layout_centerHorizontal="true"
-        android:text="Sign up first "
+        android:text="Already have an account? "
         android:textColor="@color/main_color"
         android:textSize="18sp"
         android:textStyle="italic|bold" />

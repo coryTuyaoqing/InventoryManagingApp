@@ -16,6 +16,8 @@
     <string name="StaffPermission">Permissions:</string>
     <string name="ManageStaffTitle">Manage Staff</string>
     <string name="StaffId">ID:</string>
+    <string name="SearchResults">Search Results:</string>
+    <string name="SelectedFilters">Selected Filters:</string>
     <string-array name="types_array">
         <item>Order</item>
         <item>Article</item>

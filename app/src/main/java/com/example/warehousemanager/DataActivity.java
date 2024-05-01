@@ -1,5 +1,6 @@
 package com.example.warehousemanager;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -8,7 +9,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -20,12 +20,8 @@ import java.util.List;
 public class DataActivity extends AppCompatActivity {
 
     private Spinner typeSpinner;
-    private EditText filterInputEditText;
     private Button searchButton;
-    private String[] filterOptions;
-    private ScrollView filterScrollView;
-
-    private List<String> selectedFilters = new ArrayList<>();
+    private List<CheckBox> filterCheckBoxes = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,69 +38,68 @@ public class DataActivity extends AppCompatActivity {
         });
 
         typeSpinner = findViewById(R.id.Type);
-        filterInputEditText = findViewById(R.id.filterInput);
         searchButton = findViewById(R.id.Search_Button);
-        filterScrollView = findViewById(R.id.FilterSelectScroll);
 
-        filterOptions = getResources().getStringArray(R.array.filter_array);
+        setupSpinner(typeSpinner, R.array.types_array);
 
-        populateFilters();
+        String[] filterOptions = getResources().getStringArray(R.array.filter_array);
 
-        ArrayAdapter<CharSequence> typeAdapter = ArrayAdapter.createFromResource(this,
-                R.array.types_array, android.R.layout.simple_spinner_item);
-        typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        typeSpinner.setAdapter(typeAdapter);
-
-        filterInputEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus && filterInputEditText.getText().toString().equals("Input Keyword")) {
-                    filterInputEditText.setText("");
-                }
-            }
-        });
+        setupFilterOptions(filterOptions);
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String type = typeSpinner.getSelectedItem().toString();
-                String keyword = filterInputEditText.getText().toString();
 
-                if (keyword.isEmpty() || keyword.equals("Input Keyword")) {
-                    showToast("Please enter a keyword for the search.");
-                    return;
-                }
-
-                performSearch(type, keyword);
             }
         });
     }
 
+        private void setupSpinner(Spinner spinner, int arrayResource) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(arrayResource));
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter);
+    }
 
-    private void populateFilters() {
-        LinearLayout filterCheckboxContainer = findViewById(R.id.FIlters);
+    private void setupFilterOptions(String[] filterOptions) {
+        LinearLayout filterOptionsLayout = findViewById(R.id.FIlters);
+        LinearLayout keywordInputsLayout = findViewById(R.id.KeywordInputs);
 
         for (String filter : filterOptions) {
+            EditText editText = new EditText(this);
+            editText.setHint("Input " + filter);
+            editText.setTag(filter);
+            editText.setVisibility(View.GONE); // Initially hide the keyword input fields
+            editText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (hasFocus && ((EditText) v).getText().toString().equals("Input " + filter)) {
+                        ((EditText) v).setText("");
+                    }
+                }
+            });
+            keywordInputsLayout.addView(editText); // Add to the keyword inputs layout
+
             CheckBox checkBox = new CheckBox(this);
             checkBox.setText(filter);
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        selectedFilters.add(filter);
-                    } else {
-                        selectedFilters.remove(filter);
+                    EditText correspondingEditText = findViewById(R.id.KeywordInputs).findViewWithTag(filter);
+                    if (correspondingEditText != null) {
+                        correspondingEditText.setVisibility(isChecked ? View.VISIBLE : View.GONE); // Show/hide keyword input field based on checkbox state
                     }
                 }
             });
-            filterCheckboxContainer.addView(checkBox);
+            filterOptionsLayout.addView(checkBox);
+            filterCheckBoxes.add(checkBox);
+
+            if (filter.equals("ID")) {
+                checkBox.setChecked(true); // Automatically check the checkbox for "ID"
+                editText.setVisibility(View.VISIBLE); // Show the EditText field for "ID" by default
+            }
         }
     }
 
-
-    private void performSearch(String type, String keyword) {
-        // Implement your search logic here
-    }
 
     private void showToast(String message) {
         Toast.makeText(DataActivity.this, message, Toast.LENGTH_SHORT).show();

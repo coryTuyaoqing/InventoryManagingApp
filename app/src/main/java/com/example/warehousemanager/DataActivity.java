@@ -32,6 +32,9 @@ import okhttp3.Response;
 
 public class DataActivity extends AppCompatActivity {
 
+    //todo: use composite pattern to show an order (bundle!)
+    //write an primitive interface for article and then order also implement that
+
     private Spinner typeSpinner;
     private Button searchButton;
     private List<CheckBox> filterCheckBoxes = new ArrayList<>();

@@ -24,6 +24,9 @@
             android:name=".SearchResultsActivity"
             android:exported="false" />
         <activity
+            android:name=".ScannerActivity"
+            android:exported="false" />
+        <activity
             android:name=".RegistrationActivity"
             android:exported="false" />
         <activity
@@ -50,6 +53,10 @@
         <activity
             android:name=".StaffActivity"
             android:exported="false" />
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="fullSensor"
+            tools:replace="screenOrientation" />
     </application>
 
 </manifest>

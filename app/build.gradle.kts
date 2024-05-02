@@ -44,5 +44,5 @@ dependencies {
     implementation("com.android.volley:volley:1.2.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.zxing:core:3.4.1")
-    implementation("com.journeyapps:zxing-android-embedded:4.1.0")
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0")
 }

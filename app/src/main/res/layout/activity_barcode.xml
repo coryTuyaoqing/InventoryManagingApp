@@ -1,42 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@drawable/main_background"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".BarcodeActivity">
 
-    <TextView
-        android:id="@+id/textContent"
+    <com.journeyapps.barcodescanner.DecoratedBarcodeView
+        android:id="@+id/zxing_barcode_scanner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"/>
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="40dp"
+        android:contentDescription="choose barcode from album."
+        android:src="@drawable/photo_library"
+        android:backgroundTint="@color/background_color"
+        android:id="@+id/photo_library_floating_button"/>
 
-    <TextView
-        android:id="@+id/textFormat"
-        android:layout_width="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="10dp"
-        android:layout_height="wrap_content" />
 
-    <Button
-        android:id="@+id/scanBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:backgroundTint="@color/main_color"
-        android:layout_gravity="center"
-        android:text="Scan"/>
 
-    <Button
-        android:id="@+id/backBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:backgroundTint="@color/main_color"
-        android:layout_gravity="center"
-        android:text="Back"/>
 
-</LinearLayout>
+</RelativeLayout>

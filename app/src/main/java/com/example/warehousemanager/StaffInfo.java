@@ -12,11 +12,11 @@ import java.io.IOException;
 import java.util.Scanner;
 
 public class StaffInfo {
+    //todo: try to make it into a singleton class!
     private String staffID;
     private String name;
     private String permission;
     private String email;
-
     private File staffData;
     private final String TAG = "StaffInfo";
     public StaffInfo(Context context) {

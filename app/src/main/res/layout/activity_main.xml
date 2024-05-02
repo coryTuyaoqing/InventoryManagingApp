@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/Scanner_button"
+        android:id="@+id/Barcode_scanner_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
@@ -27,7 +27,7 @@
         android:text="@string/Search"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Scanner_button" />
+        app:layout_constraintTop_toBottomOf="@+id/Barcode_scanner_button" />
 
     <Button
         android:id="@+id/Profile_button"
@@ -80,8 +80,8 @@
         android:id="@+id/imageView3"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        app:layout_constraintEnd_toStartOf="@+id/Scanner_button"
-        app:layout_constraintTop_toTopOf="@+id/Scanner_button"
+        app:layout_constraintEnd_toStartOf="@+id/Barcode_scanner_button"
+        app:layout_constraintTop_toTopOf="@+id/Barcode_scanner_button"
         app:srcCompat="@drawable/barcode" />
 
     <ImageView

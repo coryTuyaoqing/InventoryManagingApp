@@ -12,11 +12,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.warehousemanager.model.DBConst;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;

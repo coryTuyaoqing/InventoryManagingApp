@@ -1,4 +1,4 @@
-package com.example.warehousemanager;
+package com.example.warehousemanager.model;
 
 public class DBConst {
 

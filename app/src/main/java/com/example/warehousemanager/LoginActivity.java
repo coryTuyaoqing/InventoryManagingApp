@@ -12,6 +12,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.warehousemanager.model.DBConst;
+import com.example.warehousemanager.model.Staff;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;

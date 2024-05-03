@@ -1,4 +1,4 @@
-package com.example.warehousemanager;
+package com.example.warehousemanager.model;
 
 import android.content.Context;
 import android.util.Log;
@@ -21,15 +21,15 @@ public class Staff {
     private static final String TAG = "Staff";
     private static Staff staff;
 
+    private Staff(Context context) {
+        staffInfo = new File(context.getFilesDir(), "staff_info");
+    }
+
     public static synchronized Staff getStaff(Context context){
         if(staff == null){
             staff = new Staff(context);
         }
         return staff;
-    }
-
-    public Staff(Context context) {
-        staffInfo = new File(context.getFilesDir(), "staff_info");
     }
 
     public boolean fileExist(){
@@ -71,7 +71,7 @@ public class Staff {
         }
     }
 
-    void readFile(){
+    public void readFile(){
         FileInputStream fis;
         try {
             fis = new FileInputStream(staffInfo);

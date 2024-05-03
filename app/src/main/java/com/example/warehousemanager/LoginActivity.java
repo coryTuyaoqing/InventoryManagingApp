@@ -34,8 +34,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         //check if the user already login
-        StaffInfo staffInfo = new StaffInfo(getApplicationContext());
-        if (staffInfo.fileExist()) {
+        Staff staff = Staff.getStaff(getApplicationContext());
+        if (staff.fileExist()) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }
@@ -112,7 +112,7 @@ public class LoginActivity extends AppCompatActivity {
 
                             if (userPassword.equals(realPassword)) {
                                 //if the password is correct: jump to main page and save user data
-                                StaffInfo newStaff = new StaffInfo(getApplicationContext());
+                                Staff newStaff = Staff.getStaff(getApplicationContext());
                                 newStaff.initInfo();
                                 newStaff.writeInfo(id, name, permission, email);
 

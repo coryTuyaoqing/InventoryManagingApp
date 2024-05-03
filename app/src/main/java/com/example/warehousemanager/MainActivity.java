@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -16,10 +17,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
-    Button buttonOpenData;
-    Button buttonOpenStaffManager;
-    Button btnProfile;
-    Button btnScanner;
+    Button buttonOpenData, buttonOpenStaffManager, btnProfile, btnScanner, btnAddArticle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         buttonOpenStaffManager = findViewById(R.id.OpenStaff_button);
         btnProfile = findViewById(R.id.Profile_button);
         btnScanner = findViewById(R.id.Barcode_scanner_button);
+        btnAddArticle = findViewById(R.id.btnAddArticle);
 
         buttonOpenData.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, DataActivity.class)));
 
@@ -38,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
         btnProfile.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ProfileActivity.class)));
 
         btnScanner.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ScannerActivity.class)));
+
+        btnAddArticle.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AddArticleActivity.class)));
     }
 
 

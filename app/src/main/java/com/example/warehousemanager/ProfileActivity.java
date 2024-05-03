@@ -23,20 +23,23 @@ public class ProfileActivity extends AppCompatActivity {
         btnLogout = findViewById(R.id.btnLogout);
         btnProfileBack = findViewById(R.id.btnProfileBack);
 
-        StaffInfo staffInfo = new StaffInfo(getApplicationContext());
-        staffInfo.readFile();
-        txtProfileID.setText("ID: " + staffInfo.getStaffID());
-        txtProfileName.setText("Name: " + staffInfo.getName());
-        txtProfilePermission.setText("Permission: " + staffInfo.getPermission());
-        txtProfileEmail.setText(staffInfo.getEmail());
+        Staff staff = Staff.getStaff(getApplicationContext());
+        staff.readFile();
+        txtProfileID.setText("ID: " + staff.getStaffID());
+        txtProfileName.setText("Name: " + staff.getName());
+        txtProfilePermission.setText("Permission: " + staff.getPermission());
+        txtProfileEmail.setText(staff.getEmail());
 
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                staffInfo.deleteFile();
-                Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(intent);
+                if(staff.deleteFile()){
+                    Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }
+
             }
         });
 

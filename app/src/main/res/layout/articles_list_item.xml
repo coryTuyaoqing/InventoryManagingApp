@@ -6,37 +6,30 @@
     app:cardElevation="10dp"
     android:background="@color/background_color"
     app:cardCornerRadius="10dp"
-    android:layout_margin="20dp"
-    android:id="@+id/order_list_item_parent">
+    android:layout_margin="5dp"
+    android:id="@+id/articles_list_parent">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="10dp"
-        android:backgroundTint="@color/background_color"
-        android:gravity="center_horizontal">
+        android:backgroundTint="@color/background_color">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Order description"
-            android:id="@+id/txt_order_description"
+            android:text="Artcle name"
+            android:id="@+id/txt_article_name"
             android:textSize="24sp"
             android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Articles"
-            android:id="@+id/txt_articles"
+            android:text="Info"
+            android:id="@+id/txt_articles_info"
             android:textSize="20sp"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/recyclerArticlesInOrderItem"/>
-
 
     </LinearLayout>
 

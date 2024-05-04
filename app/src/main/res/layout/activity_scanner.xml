@@ -20,4 +20,18 @@
         android:text="scanner activity"
         android:id="@+id/txtScanner"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_corner_rectangle"
+        android:layout_marginHorizontal="32dp"
+        android:gravity="center_horizontal">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerArticles"/>
+
+    </LinearLayout>
+
 </LinearLayout>

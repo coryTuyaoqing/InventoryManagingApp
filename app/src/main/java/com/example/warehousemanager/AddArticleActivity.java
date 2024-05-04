@@ -6,8 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.warehousemanager.model.Order;
+import com.example.warehousemanager.Controller.OrderRecViewAdaptor;
+import com.example.warehousemanager.Model.Article;
+import com.example.warehousemanager.Model.Order;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class AddArticleActivity extends AppCompatActivity {
@@ -18,17 +21,29 @@ public class AddArticleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_article);
 
+        Article t_shirt = new Article(1, "t_shirt", "red", "L");
+        Article shoes = new Article(2, "shoes", "black", "42");
+
+        Order order1 = new Order(1, LocalDate.of(2024,5,2), "test");
+        order1.putArticle(t_shirt, 3);
+        order1.putArticle(shoes, 10);
+
+        Order order2 = new Order(2, LocalDate.of(2023,7,1), "");
+        order2.putArticle(t_shirt, 100);
+        order2.putArticle(shoes, 50);
+
         ArrayList<Order> orders = new ArrayList<>();
-        orders.add(new Order(1,1));
-        orders.add(new Order(2,1));
-        orders.add(new Order(2,2));
+        orders.add(order1);
+        orders.add(order2);
 
         ordersRcyView = findViewById(R.id.ordersRcyView);
 
         OrderRecViewAdaptor orderRecViewAdaptor = new OrderRecViewAdaptor(this, orders);
         ordersRcyView.setAdapter(orderRecViewAdaptor);
-
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
         ordersRcyView.setLayoutManager(new GridLayoutManager(this, 2));
+
+//        ArticleRecViewAdaptor adaptor = new ArticleRecViewAdaptor(this, order1.getArticlesNrMap());
+//        ordersRcyView.setAdapter(adaptor);
+//        ordersRcyView.setLayoutManager(new GridLayoutManager(this, 2));
     }
 }

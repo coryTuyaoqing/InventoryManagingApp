@@ -1,4 +1,4 @@
-package com.example.warehousemanager.model;
+package com.example.warehousemanager.Model;
 
 import android.content.Context;
 import android.util.Log;

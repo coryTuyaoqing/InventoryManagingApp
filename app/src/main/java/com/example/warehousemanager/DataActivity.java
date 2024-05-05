@@ -15,8 +15,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.warehousemanager.SearchResultsActivity;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 

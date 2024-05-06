@@ -8,8 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.warehousemanager.Model.Staff;
-
 public class ProfileActivity extends AppCompatActivity {
     TextView txtProfileID, txtProfilePermission, txtProfileName, txtProfileEmail;
     Button btnLogout, btnProfileBack;

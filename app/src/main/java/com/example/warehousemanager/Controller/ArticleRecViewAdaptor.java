@@ -11,7 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.warehousemanager.R;
-import com.example.warehousemanager.Model.Article;
+import com.example.warehousemanager.Article;
 
 import java.util.ArrayList;
 import java.util.Map;

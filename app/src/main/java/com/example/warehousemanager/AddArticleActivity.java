@@ -7,8 +7,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.warehousemanager.Controller.OrderRecViewAdaptor;
-import com.example.warehousemanager.Model.Article;
-import com.example.warehousemanager.Model.Order;
+import com.example.warehousemanager.Controller.ArticleRecViewAdaptor;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

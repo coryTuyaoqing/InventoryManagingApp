@@ -13,8 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.warehousemanager.R;
-import com.example.warehousemanager.Model.Article;
-import com.example.warehousemanager.Model.Order;
+import com.example.warehousemanager.Article;
+import com.example.warehousemanager.Order;
 
 import java.util.ArrayList;
 import java.util.Map;

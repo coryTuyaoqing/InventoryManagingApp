@@ -12,8 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.warehousemanager.Model.DBConst;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 

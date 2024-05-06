@@ -36,6 +36,8 @@ public class DataActivity extends AppCompatActivity {
     private Spinner typeSpinner;
     private Button searchButton;
     private List<CheckBox> filterCheckBoxes = new ArrayList<>();
+    private ArrayList<String> SelectedFilter = new ArrayList<>();
+    private ArrayList<String> FilterValues = new ArrayList<>();
     private static final String BASE_URL = "https://studev.groept.be/api/a23PT308/";
     private static final OkHttpClient client = new OkHttpClient();
 
@@ -209,6 +211,8 @@ public class DataActivity extends AppCompatActivity {
     private void navigateToSearchResults(JSONArray jsonArray) {
         Intent intent = new Intent(DataActivity.this, SearchResultsActivity.class);
         intent.putExtra("searchResults", jsonArray.toString());
+        intent.putExtra("filter", SelectedFilter);
+        intent.putExtra("keyword", FilterValues);
         startActivity(intent);
     }
 

@@ -166,7 +166,6 @@ public class DataActivity extends AppCompatActivity {
                 SelectedFilter.add("0");
             }
         }
-        System.out.println(SelectedFilter);
     }
 
     private boolean setFilterValueList() {
@@ -190,9 +189,16 @@ public class DataActivity extends AppCompatActivity {
 
     private void performSearch(String type) {
         StringBuilder endpointBuilder = new StringBuilder();
-        endpointBuilder.append("Order_filter/");
 
-        // Add filters and their values to the endpoint
+        if ("Order".equals(type)) {
+            endpointBuilder.append("Order_filter/");
+        } else if ("Article".equals(type)) {
+            endpointBuilder.append("Article_filter/");
+        } else {
+            showToast("Invalid search type");
+            return;
+        }
+
         for (int i = 0; i < SelectedFilter.size(); i++) {
             String filter = SelectedFilter.get(i);
             String value = FilterValues.get(i);
@@ -244,11 +250,13 @@ public class DataActivity extends AppCompatActivity {
     }
 
 
+
     private void navigateToSearchResults(JSONArray jsonArray) {
         Intent intent = new Intent(DataActivity.this, SearchResultsActivity.class);
         intent.putExtra("searchResults", jsonArray.toString());
         intent.putExtra("filter", SelectedFilter);
         intent.putExtra("keyword", FilterValues);
+        intent.putExtra("searchtype", typeSpinner.getSelectedItem().toString());
         startActivity(intent);
     }
 

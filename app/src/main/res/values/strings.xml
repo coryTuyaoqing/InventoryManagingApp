@@ -22,12 +22,16 @@
         <item>Order</item>
         <item>Article</item>
     </string-array>
-    <string-array name="filter_array">
+    <string-array name="filter_order">
+        <item>ID</item>
+        <item>deadline</item>
+        <item>reference</item>
+    </string-array>
+    <string-array name="filter_article">
         <item>ID</item>
         <item>name</item>
-        <item>size</item>
         <item>color</item>
-        <item>most articles</item>
+        <item>size</item>
     </string-array>
 
 

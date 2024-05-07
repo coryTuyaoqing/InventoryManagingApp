@@ -3,6 +3,7 @@ package com.example.warehousemanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.warehousemanager.SearchResultsActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,12 +33,10 @@ import okhttp3.Response;
 
 public class DataActivity extends AppCompatActivity {
 
-    //todo: use composite pattern to show an order (bundle!)
-    //write an primitive interface for article and then order also implement that
-
     private Spinner typeSpinner;
     private Button searchButton;
     private List<CheckBox> filterCheckBoxes = new ArrayList<>();
+    private List<EditText> filterEditText = new ArrayList<>();
     private ArrayList<String> SelectedFilter = new ArrayList<>();
     private ArrayList<String> FilterValues = new ArrayList<>();
     private static final String BASE_URL = "https://studev.groept.be/api/a23PT308/";
@@ -59,16 +60,39 @@ public class DataActivity extends AppCompatActivity {
 
         setupSpinner(typeSpinner, R.array.types_array);
 
-        String[] filterOptions = getResources().getStringArray(R.array.filter_array);
-        setupFilterOptions(filterOptions);
+        typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                clearFilters();
+
+                String[] filterOptions;
+                if (position == 0) {
+                    filterOptions = getResources().getStringArray(R.array.filter_order);
+                } else {
+                    filterOptions = getResources().getStringArray(R.array.filter_article);
+                }
+                setupFilterOptions(filterOptions);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });
 
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String type = typeSpinner.getSelectedItem().toString();
-                String filter = getSelectedFilter();
-                String keyword = getKeywordForFilter(filter);
-                performSearch(type, filter, keyword);
+                setSelectedFilterList();
+                setSelectedFilterList();
+                if (setFilterValueList()) {
+                    performSearch(type);
+                    Toast.makeText(DataActivity.this, "Search in progress", Toast.LENGTH_SHORT).show();
+                }
+
+
             }
         });
     }
@@ -97,6 +121,7 @@ public class DataActivity extends AppCompatActivity {
                 }
             });
             keywordInputsLayout.addView(editText);
+            filterEditText.add(editText);
 
             CheckBox checkBox = new CheckBox(this);
             checkBox.setText(filter);
@@ -119,60 +144,70 @@ public class DataActivity extends AppCompatActivity {
         }
     }
 
-    private String getSelectedFilter() {
+    private void clearFilters() {
+        LinearLayout filterOptionsLayout = findViewById(R.id.FIlters);
+        LinearLayout keywordInputsLayout = findViewById(R.id.KeywordInputs);
+
+        filterOptionsLayout.removeAllViews();
+        keywordInputsLayout.removeAllViews();
+
+        filterCheckBoxes.clear();
+        filterEditText.clear();
+        SelectedFilter.clear();
+        FilterValues.clear();
+    }
+
+    private void setSelectedFilterList() {
+        SelectedFilter.clear();
         for (CheckBox checkBox : filterCheckBoxes) {
             if (checkBox.isChecked()) {
-                return checkBox.getText().toString();
+                SelectedFilter.add("1");
+            } else {
+                SelectedFilter.add("0");
             }
         }
-        return "";
+        System.out.println(SelectedFilter);
     }
 
-    private String getKeywordForFilter(String filter) {
-        EditText editText = findViewById(R.id.KeywordInputs).findViewWithTag(filter);
-        if (editText != null) {
-            return editText.getText().toString();
+    private boolean setFilterValueList() {
+        FilterValues.clear();
+        for (int i = 0; i < filterCheckBoxes.size(); i++) {
+            CheckBox checkBox = filterCheckBoxes.get(i);
+            EditText input = filterEditText.get(i);
+            if (checkBox.isChecked() && input.getVisibility() == View.VISIBLE) {
+                String value = input.getText().toString().trim();
+                if (value.isEmpty()) {
+                    showToast("Fill in all fields");
+                    return false;
+                }
+                FilterValues.add(value);
+            } else {
+                FilterValues.add("0");
+            }
         }
-        return "";
+        return true;
     }
 
-    private void performSearch(String type, String filter, String keyword) {
-        String endpoint;
-        String url;
+    private void performSearch(String type) {
+        StringBuilder endpointBuilder = new StringBuilder();
+        endpointBuilder.append("Order_filter/");
 
-        if (type.equals("Order")) {
-            switch (filter.toLowerCase()) {
-                case "id":
-                    endpoint = "get_order_fromID/" + keyword;
-                    break;
-                case "most articles":
-                    endpoint = "get_order_mostArticles";
-                    break;
-                default:
-                    showToast("Invalid filter for order");
-                    return;
-            }
-        } else {
-            switch (filter.toLowerCase()) {
-                case "size":
-                    endpoint = "get_article_fromSize/" + keyword;
-                    break;
-                case "color":
-                    endpoint = "get_article_fromColor/" + keyword;
-                    break;
-                case "name":
-                    endpoint = "get_article_fromName/" + keyword;
-                    break;
-                case "id":
-                    endpoint = "get_article_fromID/" + keyword;
-                    break;
-                default:
-                    showToast("Invalid filter for article");
-                    return;
-            }
+        // Add filters and their values to the endpoint
+        for (int i = 0; i < SelectedFilter.size(); i++) {
+            String filter = SelectedFilter.get(i);
+            String value = FilterValues.get(i);
+
+            endpointBuilder.append(filter).append("/").append(value).append("/");
         }
 
-        url = BASE_URL + endpoint;
+        // Remove the trailing "/" character
+        if (endpointBuilder.charAt(endpointBuilder.length() - 1) == '/') {
+            endpointBuilder.deleteCharAt(endpointBuilder.length() - 1);
+        }
+
+        String endpoint = endpointBuilder.toString();
+        String url = BASE_URL + endpoint;
+        System.out.println(url);
 
         Request request = new Request.Builder()
                 .url(url)
@@ -207,6 +242,7 @@ public class DataActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void navigateToSearchResults(JSONArray jsonArray) {
         Intent intent = new Intent(DataActivity.this, SearchResultsActivity.class);

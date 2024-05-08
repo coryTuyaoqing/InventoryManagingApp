@@ -36,7 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         //check if the user already login
         Staff staff = Staff.getStaff(getApplicationContext());
         if (staff.fileExist()) {
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
             finish();
         }
 
@@ -116,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
                                 newStaff.initInfo();
                                 newStaff.writeInfo(id, name, permission, email);
 
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                                 finish();
                             } else {
                                 runOnUiThread(() -> Toast.makeText(LoginActivity.this, "Incorrect password", Toast.LENGTH_LONG).show());

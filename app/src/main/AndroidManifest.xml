@@ -51,7 +51,7 @@
             android:name=".DataActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".HomeActivity"
             android:exported="false" />
         <activity
             android:name=".StaffActivity"

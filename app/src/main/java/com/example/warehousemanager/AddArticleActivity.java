@@ -17,6 +17,8 @@ public class AddArticleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_article);
 
+        //these data are just for test
+        //todo: add
         Article t_shirt = new Article(1, "t_shirt", "red", "L");
         Article shoes = new Article(2, "shoes", "black", "42");
 

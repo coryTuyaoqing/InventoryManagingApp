@@ -19,7 +19,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="40dp"
         android:contentDescription="choose barcode from album."
-        android:src="@drawable/photo_library"
+        android:src="@drawable/ic_photo_library"
         android:backgroundTint="@color/background_color"
         android:id="@+id/photo_library_floating_button"/>
 

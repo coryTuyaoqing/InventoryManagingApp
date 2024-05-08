@@ -6,9 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.warehousemanager.Controller.OrderRecViewAdaptor;
-import com.example.warehousemanager.Controller.ArticleRecViewAdaptor;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -41,8 +38,8 @@ public class AddArticleActivity extends AppCompatActivity {
         ordersRcyView.setAdapter(orderRecViewAdaptor);
         ordersRcyView.setLayoutManager(new GridLayoutManager(this, 2));
 
-        ArticleRecViewAdaptor adaptor = new ArticleRecViewAdaptor(this, order1.getArticlesNrMap());
-        ordersRcyView.setAdapter(adaptor);
-        ordersRcyView.setLayoutManager(new GridLayoutManager(this, 2));
+//        ArticleRecViewAdaptor adaptor = new ArticleRecViewAdaptor(this, order1.getArticlesNrMap());
+//        ordersRcyView.setAdapter(adaptor);
+//        ordersRcyView.setLayoutManager(new GridLayoutManager(this, 2));
     }
 }

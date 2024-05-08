@@ -1,5 +1,6 @@
 package com.example.warehousemanager;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class Article {
@@ -45,4 +46,14 @@ public class Article {
         return ((Article)obj).getID() == getID();
     }
 
+    @NonNull
+    @Override
+    public String toString() {
+        return "Article{" +
+                "ID=" + ID +
+                ", articleName='" + articleName + '\'' +
+                ", color='" + color + '\'' +
+                ", size='" + size + '\'' +
+                '}';
+    }
 }

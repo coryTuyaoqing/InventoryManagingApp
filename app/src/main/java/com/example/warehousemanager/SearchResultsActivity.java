@@ -1,10 +1,5 @@
 package com.example.warehousemanager;
 
-import com.example.warehousemanager.Article;
-import com.example.warehousemanager.Controller.OrderRecViewAdaptor;
-import com.example.warehousemanager.Controller.ArticleRecViewAdaptor;
-import com.example.warehousemanager.Order;
-
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;

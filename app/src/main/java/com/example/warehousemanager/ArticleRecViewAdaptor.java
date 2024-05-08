@@ -1,4 +1,4 @@
-package com.example.warehousemanager.Controller;
+package com.example.warehousemanager;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,24 +10,32 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.warehousemanager.R;
-import com.example.warehousemanager.Article;
-
 import java.util.ArrayList;
 import java.util.Map;
 
 public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAdaptor.ViewHolder> {
     private Context context;
-    private Map<Article, Integer> articlesNrMap;
+    private ArrayList<Article> articles;
+    private ArrayList<Integer> articleNr;
 
-    public ArticleRecViewAdaptor(Context context, Map<Article, Integer> articlesNrMap) {
+    public ArticleRecViewAdaptor(Context context, ArrayList<Article> articles) {
         this.context = context;
-        this.articlesNrMap = articlesNrMap;
+        this.articles = articles;
+        articleNr = null;
     }
 
-    public void setArticlesNrMap(Map<Article, Integer> articlesNrMap) {
-        this.articlesNrMap = articlesNrMap;
-        notifyDataSetChanged();
+    public ArticleRecViewAdaptor(Context context, Map<Article,Integer> articlesNrMap) {
+        this.context = context;
+        articles = new ArrayList<>(articlesNrMap.keySet());
+        articleNr = new ArrayList<>(articlesNrMap.values());
+    }
+
+    public void setArticles(ArrayList<Article> articles) {
+        this.articles = articles;
+    }
+
+    public void setArticleNr(ArrayList<Integer> articleNr) {
+        this.articleNr = articleNr;
     }
 
     @NonNull
@@ -40,19 +48,21 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ArrayList<Article> articles = new ArrayList<>(articlesNrMap.keySet());
-        ArrayList<Integer> articleNr = new ArrayList<>(articlesNrMap.values());
-
         holder.txtArticleName.setText(articles.get(position).getArticleName());
-        holder.txtArticleInfo.setText("Number: " + articleNr.get(position));
+        if(articleNr == null){
+            holder.txtArticleInfo.setText(articles.get(position).toString());
+        }
+        else{
+            holder.txtArticleInfo.setText("Number: " + articleNr.get(position));
+        }
     }
 
     @Override
     public int getItemCount() {
-        return articlesNrMap.size();
+        return articles.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView txtArticleName, txtArticleInfo;
         CardView cardArticleItem;
 

@@ -1,4 +1,4 @@
-package com.example.warehousemanager.Controller;
+package com.example.warehousemanager;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,10 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.warehousemanager.R;
-import com.example.warehousemanager.Article;
-import com.example.warehousemanager.Order;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -48,7 +44,7 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
 
         holder.txtOrderDescription.setText(order.getDescription());
 
-        holder.txtArticles.setText(":");
+        holder.txtArticles.setText("Deadline: " + order.getDeadline().toString());
 
         holder.cardOrderItem.setOnClickListener(v -> Toast.makeText(context, "Order" + order.getOrderID() + "is clicked", Toast.LENGTH_SHORT).show());
 

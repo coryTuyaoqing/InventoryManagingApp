@@ -252,7 +252,7 @@ public class DataActivity extends AppCompatActivity {
 
 
     private void navigateToSearchResults(JSONArray jsonArray) {
-        Intent intent = new Intent(DataActivity.this, SearchResultsActivity.class);
+        Intent intent = new Intent(DataActivity.this, SearchResultsActivity.class); //requireActivity()
         intent.putExtra("searchResults", jsonArray.toString());
         intent.putExtra("filter", SelectedFilter);
         intent.putExtra("keyword", FilterValues);

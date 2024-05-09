@@ -39,6 +39,8 @@ public class SearchResultsActivity extends AppCompatActivity {
         ArrayList<String> keyword = getIntent().getStringArrayListExtra("keyword");
         searchType = getIntent().getStringExtra("searchtype");
 
+        System.out.println(searchResultsJsonString);
+
         try {
             JSONArray searchResultsArray = new JSONArray(searchResultsJsonString);
             if ("order".equals(searchType)) {
@@ -46,8 +48,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                 adapter = new OrderRecViewAdaptor(this, new ArrayList<>(orders));
             } else if ("article".equals(searchType)) {
                 List<Article> articles = parseArticles(searchResultsArray);
-                Map<Article, Integer> articlesMap = convertToArticleMap(articles);
-                adapter = new ArticleRecViewAdaptor(this, articlesMap);
+                adapter = new ArticleRecViewAdaptor(this, new ArrayList<>(articles));
             }
             recyclerView.setAdapter(adapter);
         } catch (JSONException e) {
@@ -70,7 +71,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             JSONObject jsonObject = jsonArray.getJSONObject(i);
             int id = jsonObject.getInt("idOrder");
             String deadlineString = jsonObject.getString("deadline");
-            LocalDate deadline = LocalDate.parse(deadlineString); // Convert string to LocalDate
+            LocalDate deadline = LocalDate.parse(deadlineString);
             String reference = jsonObject.getString("reference");
             orders.add(new Order(id, deadline, reference));
         }
@@ -88,14 +89,6 @@ public class SearchResultsActivity extends AppCompatActivity {
             articles.add(new Article(id, name, color, size));
         }
         return articles;
-    }
-
-    private Map<Article, Integer> convertToArticleMap(List<Article> articles) {
-        Map<Article, Integer> articlesMap = new HashMap<>();
-        for (Article article : articles) {
-            articlesMap.put(article, 1);
-        }
-        return articlesMap;
     }
 
     private void displayNoResultsMessage() {

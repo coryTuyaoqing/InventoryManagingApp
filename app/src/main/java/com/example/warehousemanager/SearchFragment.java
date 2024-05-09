@@ -26,6 +26,7 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -139,8 +140,8 @@ public class SearchFragment extends Fragment {
     }
 
     private void clearFilters() {
-        LinearLayout filterOptionsLayout = getView().findViewById(R.id.FIlters);
-        LinearLayout keywordInputsLayout = getView().findViewById(R.id.KeywordInputs);
+        LinearLayout filterOptionsLayout = requireView().findViewById(R.id.FIlters);
+        LinearLayout keywordInputsLayout = requireView().findViewById(R.id.KeywordInputs);
 
         filterOptionsLayout.removeAllViews();
         keywordInputsLayout.removeAllViews();

@@ -1,8 +1,27 @@
 package com.example.warehousemanager;
 
+import android.content.Context;
+import android.util.Log;
+import android.widget.FrameLayout;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Order {
     private int orderID;
@@ -10,6 +29,7 @@ public class Order {
     private LocalDate deadline;
 
     private Map<Article,Integer> articlesNrMap;
+    private static final String TAG = "Order";
 
     public Order(int orderID, LocalDate deadline, String description) {
         this.orderID = orderID;

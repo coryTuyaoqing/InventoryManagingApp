@@ -1,24 +1,40 @@
 package com.example.warehousemanager;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdaptor.ViewHolder>{
     private Context context;
-
     private ArrayList<Order> orders = new ArrayList<>();
+    private static final String TAG = "OrderRecViewAdaptor";
     public OrderRecViewAdaptor(Context context, ArrayList<Order> orders) {
         this.context = context;
         this.orders = orders;
@@ -70,5 +86,40 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
             cardOrderItem = itemView.findViewById(R.id.order_list_item_parent);
             recyclerArticlesInOrderItem = itemView.findViewById(R.id.recyclerArticlesInOrderItem);
         }
+    }
+
+    public void getOrdersFromDB(String url){
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        OkHttpClient client = new OkHttpClient();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e(TAG, "onFailure: getting order", e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                Log.d(TAG, "onResponse: getting order");
+                try{
+                    assert response.body() != null;
+                    JSONArray responseArray = new JSONArray(response.body().string());
+                    for(int i=0; i<responseArray.length(); i++){
+                        JSONObject responseObject = responseArray.getJSONObject(i);
+                        int orderID = responseObject.getInt("idOrder");
+                        String deadline = responseObject.getString("deadline");
+                        String description = responseObject.getString("reference");
+                        orders.add(new Order(orderID, LocalDate.now(), description));
+                    }
+                    if(context instanceof Activity){
+                        ((Activity) context).runOnUiThread(() -> setOrders(orders));
+                    }
+                }
+                catch (JSONException e){
+                    Log.e(TAG, "onResponse: parsing", e);
+                }
+            }
+        });
     }
 }

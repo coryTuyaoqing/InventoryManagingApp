@@ -5,10 +5,28 @@
     android:layout_height="match_parent"
     tools:context=".InfoFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="info" />
+        android:layout_margin="30dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Recent Order"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:id="@+id/txtInfoRecentOrder"
+            android:layout_gravity="start"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:id="@+id/recyclerInfoRecentOrder"/>
+
+
+    </LinearLayout>
 
 </FrameLayout>

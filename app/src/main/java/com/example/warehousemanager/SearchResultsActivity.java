@@ -46,14 +46,15 @@ public class SearchResultsActivity extends AppCompatActivity {
 
         try {
             JSONArray searchResultsArray = new JSONArray(searchResultsJsonString);
-            if ("order".equals(searchType)) {
+            if ("Order".equals(searchType)) {
                 ArrayList<Order> orders = parseOrders(searchResultsArray);
                 adapter = new OrderRecViewAdaptor(this, orders);
-            } else if ("article".equals(searchType)) {
+            } else if ("Article".equals(searchType)) {
                 ArrayList<Article> articles = parseArticles(searchResultsArray);
                 adapter = new ArticleRecViewAdaptor(this, articles);
             }
             recyclerView.setAdapter(adapter);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
         } catch (JSONException e) {
             e.printStackTrace();
             displayNoResultsMessage();

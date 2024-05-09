@@ -6,10 +6,11 @@
         android:icon="@drawable/ic_home"/>
     <item
         android:id="@+id/bottomScanInfo"
-        android:title="scan info"
+        android:title="info"
         android:icon="@drawable/ic_article"/>
     <item
         android:title=""
+        android:id="@+id/bottomBarcode"
         android:enabled="false"/>
     <item
         android:id="@+id/bottomSearch"

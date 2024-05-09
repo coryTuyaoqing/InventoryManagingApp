@@ -50,14 +50,11 @@ public class ScannerActivity extends AppCompatActivity {
     }
 
     private final ActivityResultLauncher<ScanOptions> barcodeLauncher = registerForActivityResult(new ScanContract(),
-            new ActivityResultCallback<ScanIntentResult>() {
-                @Override
-                public void onActivityResult(ScanIntentResult result) {
-                    if (result.getContents() == null) {
-                        Toast.makeText(ScannerActivity.this, "cancelled.", Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(ScannerActivity.this, "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
-                    }
+            result -> {
+                if (result.getContents() == null) {
+                    Toast.makeText(ScannerActivity.this, "cancelled.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(ScannerActivity.this, "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
                 }
             });
 }

@@ -20,7 +20,7 @@
         android:layout_marginBottom="40dp"
         android:contentDescription="choose barcode from album."
         android:src="@drawable/ic_photo_library"
-        android:backgroundTint="@color/background_color"
+        android:backgroundTint="@color/white"
         android:id="@+id/photo_library_floating_button"/>
 
 

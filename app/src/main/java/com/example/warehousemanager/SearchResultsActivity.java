@@ -1,8 +1,11 @@
 package com.example.warehousemanager;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,6 +59,24 @@ public class SearchResultsActivity extends AppCompatActivity {
             displayNoResultsMessage();
         }
 
+        if (filter != null && keyword != null) {
+            LinearLayout selectedFilterLayout = findViewById(R.id.SelectedFilterLayout);
+            for (int i = 0; i < filter.size(); i++) {
+                if ("1".equals(filter.get(i))) {
+                    String filterName = getFilterName(i);
+                    String filterValue = keyword.get(i);
+
+                    TextView textView = new TextView(this);
+                    textView.setText(filterName + ": " + filterValue);
+
+                    selectedFilterLayout.addView(textView);
+                }
+            }
+        } else {
+            // Handle case when filter or keyword ArrayLists are null
+            Toast.makeText(this, "No filters and keywords found", Toast.LENGTH_SHORT).show();
+        }
+
         Button btnDataReturn = findViewById(R.id.BackSearchResults);
         btnDataReturn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +110,18 @@ public class SearchResultsActivity extends AppCompatActivity {
             articles.add(new Article(id, name, color, size));
         }
         return articles;
+    }
+
+    private String getFilterName(int index) {
+        // Determine the filter name based on the index and searchType
+        if ("Order".equals(searchType)) {
+            String[] orderFilters = getResources().getStringArray(R.array.filter_order);
+            return orderFilters[index];
+        } else if ("Article".equals(searchType)) {
+            String[] articleFilters = getResources().getStringArray(R.array.filter_article);
+            return articleFilters[index];
+        }
+        return ""; // Return empty string if searchType is not recognized
     }
 
     private void displayNoResultsMessage() {

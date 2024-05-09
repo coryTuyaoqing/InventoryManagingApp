@@ -44,11 +44,11 @@ public class SearchResultsActivity extends AppCompatActivity {
         try {
             JSONArray searchResultsArray = new JSONArray(searchResultsJsonString);
             if ("order".equals(searchType)) {
-                List<Order> orders = parseOrders(searchResultsArray);
-                adapter = new OrderRecViewAdaptor(this, new ArrayList<>(orders));
+                ArrayList<Order> orders = parseOrders(searchResultsArray);
+                adapter = new OrderRecViewAdaptor(this, orders);
             } else if ("article".equals(searchType)) {
-                List<Article> articles = parseArticles(searchResultsArray);
-                adapter = new ArticleRecViewAdaptor(this, new ArrayList<>(articles));
+                ArrayList<Article> articles = parseArticles(searchResultsArray);
+                adapter = new ArticleRecViewAdaptor(this, articles);
             }
             recyclerView.setAdapter(adapter);
         } catch (JSONException e) {

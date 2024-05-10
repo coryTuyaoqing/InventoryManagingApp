@@ -4,24 +4,36 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 public class Article {
-    private int ID;
-    private String articleName;
+    private int idArticle;
+    private String name;
+    private String supplierName;
+    private double price;
     private String color;
     private String size;
 
-    public Article(int ID, String articleName, String color, String size) {
-        this.ID = ID;
-        this.articleName = articleName;
+    public Article(int idArticle, String name, String supplierName, double price, String color, String size) {
+        this.idArticle = idArticle;
+        this.name = name;
+        this.supplierName = supplierName;
+        this.price = price;
         this.color = color;
         this.size = size;
     }
 
-    public int getID() {
-        return ID;
+    public int getIdArticle() {
+        return idArticle;
     }
 
     public String getArticleName() {
-        return articleName;
+        return name;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public double getPrice() {
+        return price;
     }
 
     public String getColor() {
@@ -34,24 +46,26 @@ public class Article {
 
     @Override
     public int hashCode() {
-        return getID();
+        return getIdArticle();
     }
 
     @Override
-    public boolean equals(@Nullable Object obj) { //two article is equal if they have the same ID
+    public boolean equals(@Nullable Object obj) {
         if(obj == this)
             return true;
         if(obj == null || getClass() != obj.getClass())
             return false;
-        return ((Article)obj).getID() == getID();
+        return ((Article)obj).getIdArticle() == getIdArticle();
     }
 
     @NonNull
     @Override
     public String toString() {
         return "Article{" +
-                "ID=" + ID +
-                ", articleName='" + articleName + '\'' +
+                "idArticle=" + idArticle +
+                ", name='" + name + '\'' +
+                ", supplierName='" + supplierName + '\'' +
+                ", price=" + price +
                 ", color='" + color + '\'' +
                 ", size='" + size + '\'' +
                 '}';

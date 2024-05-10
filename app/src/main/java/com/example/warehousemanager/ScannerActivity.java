@@ -29,8 +29,8 @@ public class ScannerActivity extends AppCompatActivity {
         btnScanner_scan = findViewById(R.id.btnScanner_scan);
         recyclerArticles = findViewById(R.id.recyclerArticles);
 
-        Article t_shirt = new Article(1, "t_shirt", "red", "L");
-        Article shoes = new Article(2, "shoes", "black", "42");
+        Article t_shirt = new Article(1, "t_shirt", "test", 10, "red", "L");
+        Article shoes = new Article(2, "shoes", "test", 10, "Black", "42");
 
         Map<Article, Integer> articleNrMap = new HashMap<>();
         articleNrMap.put(t_shirt, 30);

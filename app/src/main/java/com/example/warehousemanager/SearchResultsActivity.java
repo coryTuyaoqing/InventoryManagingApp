@@ -112,10 +112,13 @@ public class SearchResultsActivity extends AppCompatActivity {
             String name = jsonObject.getString("name");
             String color = jsonObject.getString("color");
             String size = jsonObject.getString("size");
-            articles.add(new Article(id, name, color, size));
+            String supplierName = jsonObject.getString("SupplierName");
+            double price = jsonObject.getDouble("Price");
+            articles.add(new Article(id, name, supplierName, price, color, size));
         }
         return articles;
     }
+
 
     private String getFilterName(int index) {
         // Determine the filter name based on the index and searchType

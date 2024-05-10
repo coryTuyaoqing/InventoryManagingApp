@@ -19,8 +19,8 @@ public class AddArticleActivity extends AppCompatActivity {
 
         //these data are just for test
         //todo: add
-        Article t_shirt = new Article(1, "t_shirt", "red", "L");
-        Article shoes = new Article(2, "shoes", "black", "42");
+        Article t_shirt = new Article(1, "t_shirt", "test", 10, "red", "L");
+        Article shoes = new Article(2, "shoes", "test", 10, "black", "42");
 
         Order order1 = new Order(1, LocalDate.of(2024,5,2), "test", "testname", "testname2", 0);
         order1.putArticle(t_shirt, 3);

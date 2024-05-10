@@ -1,8 +1,25 @@
 package com.example.warehousemanager;
 
+import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Order {
     private int orderID;
@@ -12,6 +29,7 @@ public class Order {
     private String responsible;
     private int highlightedOrder;
     private Map<Article,ArticleNr> articlesNrMap;
+    private static final String TAG = "Order";
 
     public Order(int orderID, LocalDate deadline, String description, String customer, String responsible, int highlightedOrder) {
         this.orderID = orderID;
@@ -69,25 +87,68 @@ public class Order {
         articlesNrMap.put(article, new ArticleNr(requiredNr, finishedNr));
     }
 
+    public void getArticlesOfOrders(GetArticlesCallback callback) throws JSONException{
+        OkHttpClient client = new OkHttpClient();
+        String url = DBConst.DB_URL + "get_articles_of_order/";
+        Request request = new Request.Builder()
+                .url(url + getOrderID())
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e(TAG, "onFailure: ", e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                Log.d(TAG, "onResponse: ");
+                JSONArray responseArray;
+                try {
+                    assert response.body() != null;
+                    responseArray = new JSONArray(response.body().string());
+                    for (int i = 0; i < responseArray.length(); i++) {
+                        JSONObject responseObject = responseArray.getJSONObject(i);
+                        int articleID = responseObject.getInt("idArticle");
+                        String name = responseObject.getString("name");
+                        String supplierName = responseObject.getString("SupplierName");
+                        String color = responseObject.getString("color");
+                        String size = responseObject.getString("size");
+                        int articleRequired = responseObject.getInt("articleRequired");
+                        int articlesInStock = responseObject.getInt("articlesInStock");
+                        double price;
+                        try{price = responseObject.getDouble("Price");} catch (JSONException e){price = -1;}
+                        putArticle(new Article(articleID, name, supplierName, price, color, size), new Order.ArticleNr(articleRequired, articlesInStock));
+                    }
+                    callback.AfterGetArticles(Order.this);
+                } catch (JSONException e) {
+                    Log.e(TAG, "onResponse: parsing", e);
+                }
+            }
+        });
+    }
+
     public static class ArticleNr{
         private int requiredNr;
-        private int finishedNr;
+        private int inStockNr;
 
         public ArticleNr(int requiredNr, int finishedNr) {
             this.requiredNr = requiredNr;
-            this.finishedNr = finishedNr;
+            this.inStockNr = finishedNr;
         }
 
         public int getRequiredNr() {
             return requiredNr;
         }
 
-        public int getFinishedNr() {
-            return finishedNr;
+        public int getInStockNr() {
+            return inStockNr;
         }
 
-        public void setFinishedNr(int finishedNr) {
-            this.finishedNr = finishedNr;
+        public void setInStockNr(int inStockNr) {
+            this.inStockNr = inStockNr;
         }
+    }
+    public interface GetArticlesCallback{
+        void AfterGetArticles(Order order);
     }
 }

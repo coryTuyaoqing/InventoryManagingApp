@@ -23,8 +23,7 @@ public class HomeFragment extends Fragment {
 
         //initialize recycler view
         recyclerHome = view.findViewById(R.id.recyclerHomeHighLight);
-        OrderRecViewAdaptor adaptor = new OrderRecViewAdaptor(getContext(),
-                order -> Toast.makeText(getContext(), order.getOrderID() + " is clicked (home callback)", Toast.LENGTH_SHORT).show());
+        OrderRecViewAdaptor adaptor = new OrderRecViewAdaptor(getContext());
         //get orders from the database
         String url = DBConst.DB_URL + "get_highlighted_orders";
         adaptor.getOrdersFromDB(url);

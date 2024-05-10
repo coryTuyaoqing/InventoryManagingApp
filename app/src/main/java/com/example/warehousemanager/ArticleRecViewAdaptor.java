@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,7 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -93,6 +93,20 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
         // Bind article data to the views
         holder.txtArticleName.setText(article.getArticleName());
         holder.txtArticleInfo.setText("Color: " + article.getColor() + ", Size: " + article.getSize());
+
+        if(!articleNr.isEmpty()){
+            Order.ArticleNr nr = articleNr.get(position);
+            TextView txtArticleInStock = new TextView(context);
+            txtArticleInStock.setText("In stock: " + nr.getInStockNr());
+            txtArticleInStock.setTextColor(context.getResources().getColor(R.color.purple));
+
+            TextView txtArticleRequired = new TextView(context);
+            txtArticleRequired.setText("Required: " + nr.getRequiredNr());
+            txtArticleRequired.setTextColor(context.getResources().getColor(R.color.purple));
+
+            holder.linearArticleItem.addView(txtArticleRequired);
+            holder.linearArticleItem.addView(txtArticleInStock);
+        }
     }
 
     @Override
@@ -146,12 +160,14 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView txtArticleName, txtArticleInfo;
         CardView cardArticleItem;
+        LinearLayout linearArticleItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtArticleName = itemView.findViewById(R.id.txt_article_name);
             txtArticleInfo = itemView.findViewById(R.id.txt_articles_info);
             cardArticleItem = itemView.findViewById(R.id.articles_list_parent);
+            linearArticleItem = itemView.findViewById(R.id.linearArticleItem);
         }
     }
 

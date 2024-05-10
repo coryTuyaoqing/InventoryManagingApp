@@ -31,17 +31,22 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdaptor.ViewHolder>{
+public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdaptor.ViewHolder> {
     private Context context;
     private ArrayList<Order> orders;
-    private CallBack callBack = order -> {}; //when an order is clicked, nothing happened by default
+    private CallBack callBack = order -> {
+        // Create and show the dialog when the item is clicked
+        OrderDetailsDialogFragment dialogFragment = new OrderDetailsDialogFragment(order);
+        dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "OrderDetailsDialog");
+    }; //default callback function
     private static final String TAG = "OrderRecViewAdaptor";
+
     public OrderRecViewAdaptor(Context context, ArrayList<Order> orders) {
         this.context = context;
         this.orders = orders;
     }
 
-    public OrderRecViewAdaptor(Context context){
+    public OrderRecViewAdaptor(Context context) {
         this.context = context;
         orders = new ArrayList<>();
     }
@@ -52,7 +57,7 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
         this.callBack = callBack;
     }
 
-    public OrderRecViewAdaptor(Context context, CallBack callBack){
+    public OrderRecViewAdaptor(Context context, CallBack callBack) {
         this.context = context;
         orders = new ArrayList<>();
         this.callBack = callBack;
@@ -76,20 +81,11 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
         Order order = orders.get(position);
         Map<Article, Order.ArticleNr> articles = order.getArticlesNrMap();
 
-        holder.cardOrderItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Create and show the dialog when the item is clicked
-                OrderDetailsDialogFragment dialogFragment = new OrderDetailsDialogFragment(order);
-                dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "OrderDetailsDialog");
-            }
-        });
+        holder.cardOrderItem.setOnClickListener(v -> callBack.OrderOnClick(order));
 
         // Bind order data to the views
         holder.txtOrderDescription.setText(order.getDescription());
         holder.txtArticles.setText("Deadline: " + order.getDeadline().toString());
-
-        holder.cardOrderItem.setOnClickListener(v -> callBack.OrderOnClick(order));
 
         ArticleRecViewAdaptor adaptor = new ArticleRecViewAdaptor(holder.itemView.getContext(), articles);
         holder.recyclerArticlesInOrderItem.setAdapter(adaptor);
@@ -101,7 +97,7 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
         return orders.size();
     }
 
-    public void getOrdersFromDB(String URL){
+    public void getOrdersFromDB(String URL) {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(URL)
@@ -115,10 +111,10 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 Log.d(TAG, "onResponse: getting order");
-                try{
+                try {
                     assert response.body() != null;
                     JSONArray responseArray = new JSONArray(response.body().string());
-                    for(int i=0; i<responseArray.length(); i++){
+                    for (int i = 0; i < responseArray.length(); i++) {
                         JSONObject responseObject = responseArray.getJSONObject(i);
                         int orderID = responseObject.getInt("idOrder");
                         String deadline = responseObject.getString("deadline");
@@ -128,22 +124,31 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
                         int highlightedOrder = responseObject.getInt("HighlightedOrder");
                         orders.add(new Order(orderID, LocalDate.parse(deadline), description, customer, responsible, highlightedOrder));
                     }
-                    if(context instanceof Activity){
+                    if (context instanceof Activity) {
                         ((Activity) context).runOnUiThread(() -> notifyDataSetChanged());
                     }
-                }
-                catch (JSONException e){
+
+                    for(Order order: orders){
+                        order.getArticlesOfOrders(o -> {
+                            if (context instanceof Activity) {
+                                ((Activity) context).runOnUiThread(() -> notifyDataSetChanged());
+                            }
+                        });
+                    }
+
+                } catch (JSONException e) {
                     Log.e(TAG, "onResponse: parsing", e);
                 }
             }
         });
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView txtOrderDescription;
         private TextView txtArticles;
         private CardView cardOrderItem;
         private RecyclerView recyclerArticlesInOrderItem;
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtOrderDescription = itemView.findViewById(R.id.txt_order_description);
@@ -153,7 +158,7 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
         }
     }
 
-    public interface CallBack{
+    public interface CallBack {
         void OrderOnClick(Order order);
     }
 }

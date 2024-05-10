@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,8 +36,7 @@ public class ScanResultActivity extends AppCompatActivity {
         recyclerArticleScanResult.setAdapter(articleRecViewAdaptor);
         recyclerArticleScanResult.setLayoutManager(new LinearLayoutManager(this));
 
-        OrderRecViewAdaptor orderRecViewAdaptor = new OrderRecViewAdaptor(this,
-                order -> Toast.makeText(ScanResultActivity.this, "add article to orders", Toast.LENGTH_SHORT).show());
+        OrderRecViewAdaptor orderRecViewAdaptor = new OrderRecViewAdaptor(this);
         url = DBConst.DB_URL + "get_order_from_article/" + barcodeNr;
         orderRecViewAdaptor.getOrdersFromDB(url);
         recyclerOrdersScanRelative.setAdapter(orderRecViewAdaptor);

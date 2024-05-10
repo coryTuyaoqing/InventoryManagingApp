@@ -27,7 +27,7 @@ public class HomeFragment extends Fragment {
         recyclerHome.setAdapter(adaptor);
         recyclerHome.setLayoutManager(new LinearLayoutManager(getContext()));
         //get orders from the database
-        String url = DBConst.DB_URL + "get_info_Orders";
+        String url = DBConst.DB_URL + "get_highlighted_orders";
         adaptor.getOrdersFromDB(url);
 
         return view;

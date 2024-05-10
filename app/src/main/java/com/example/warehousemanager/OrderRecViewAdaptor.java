@@ -56,15 +56,22 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Order order = orders.get(position);
-        Map<Article, Integer> articles = order.getArticlesNrMap();
 
+        holder.cardOrderItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create and show the dialog when the item is clicked
+                OrderDetailsDialogFragment dialogFragment = new OrderDetailsDialogFragment(order);
+                dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "OrderDetailsDialog");
+            }
+        });
+
+        // Bind order data to the views
         holder.txtOrderDescription.setText(order.getDescription());
-
         holder.txtArticles.setText("Deadline: " + order.getDeadline().toString());
 
-        holder.cardOrderItem.setOnClickListener(v -> Toast.makeText(context, "Order" + order.getOrderID() + "is clicked", Toast.LENGTH_SHORT).show());
-
-        ArticleRecViewAdaptor adaptor = new ArticleRecViewAdaptor(holder.itemView.getContext(), articles);
+        // Initialize and set up RecyclerView for articles within the order
+        ArticleRecViewAdaptor adaptor = new ArticleRecViewAdaptor(holder.itemView.getContext(), order.getArticlesNrMap());
         holder.recyclerArticlesInOrderItem.setAdapter(adaptor);
         holder.recyclerArticlesInOrderItem.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
     }

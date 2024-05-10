@@ -51,6 +51,7 @@ public class StaffActivity extends AppCompatActivity {
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
                 if (response.isSuccessful()) {
+                    assert response.body() != null;
                     String responseData = response.body().string();
                     System.out.println("success to get staff data");
                     runOnUiThread(new Runnable() {
@@ -79,7 +80,7 @@ public class StaffActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(StaffActivity.this, HomeActivity.class);
+                Intent intent = new Intent(StaffActivity.this, MainActivity.class);
                 startActivity(intent);
             }
         });

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -22,13 +23,13 @@ public class HomeFragment extends Fragment {
 
         //initialize recycler view
         recyclerHome = view.findViewById(R.id.recyclerHomeHighLight);
-        ArrayList<Order> orders = new ArrayList<>();
-        OrderRecViewAdaptor adaptor = new OrderRecViewAdaptor(getContext(), orders);
-        recyclerHome.setAdapter(adaptor);
-        recyclerHome.setLayoutManager(new LinearLayoutManager(getContext()));
+        OrderRecViewAdaptor adaptor = new OrderRecViewAdaptor(getContext(),
+                order -> Toast.makeText(getContext(), order.getOrderID() + " is clicked (home callback)", Toast.LENGTH_SHORT).show());
         //get orders from the database
         String url = DBConst.DB_URL + "get_highlighted_orders";
         adaptor.getOrdersFromDB(url);
+        recyclerHome.setAdapter(adaptor);
+        recyclerHome.setLayoutManager(new LinearLayoutManager(getContext()));
 
         return view;
     }

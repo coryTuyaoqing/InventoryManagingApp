@@ -21,6 +21,9 @@
         android:theme="@style/Theme.WareHouseManager"
         tools:targetApi="31">
         <activity
+            android:name=".ScanResultActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity

@@ -1,8 +1,11 @@
 package com.example.warehousemanager;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -10,6 +13,7 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanIntentResult;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 public class MainActivity extends AppCompatActivity {
@@ -63,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "cancelled.", Toast.LENGTH_LONG).show();
                 } else {
                     Toast.makeText(MainActivity.this, "scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MainActivity.this, ScanResultActivity.class);
+                    intent.putExtra("barcodeNr", result.getContents());
+                    startActivity(intent);
                 }
             });
 }

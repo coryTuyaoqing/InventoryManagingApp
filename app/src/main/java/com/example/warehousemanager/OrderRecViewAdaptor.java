@@ -33,11 +33,29 @@ import okhttp3.Response;
 
 public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdaptor.ViewHolder>{
     private Context context;
-    private ArrayList<Order> orders = new ArrayList<>();
+    private ArrayList<Order> orders;
+    private CallBack callBack = order -> {}; //when an order is clicked, nothing happened by default
     private static final String TAG = "OrderRecViewAdaptor";
     public OrderRecViewAdaptor(Context context, ArrayList<Order> orders) {
         this.context = context;
         this.orders = orders;
+    }
+
+    public OrderRecViewAdaptor(Context context){
+        this.context = context;
+        orders = new ArrayList<>();
+    }
+
+    public OrderRecViewAdaptor(Context context, ArrayList<Order> orders, CallBack callBack) {
+        this.context = context;
+        this.orders = orders;
+        this.callBack = callBack;
+    }
+
+    public OrderRecViewAdaptor(Context context, CallBack callBack){
+        this.context = context;
+        orders = new ArrayList<>();
+        this.callBack = callBack;
     }
 
     public void setOrders(ArrayList<Order> orders) {
@@ -56,6 +74,7 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Order order = orders.get(position);
+        Map<Article, Order.ArticleNr> articles = order.getArticlesNrMap();
 
         holder.cardOrderItem.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,8 +89,9 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
         holder.txtOrderDescription.setText(order.getDescription());
         holder.txtArticles.setText("Deadline: " + order.getDeadline().toString());
 
-        // Initialize and set up RecyclerView for articles within the order
-        ArticleRecViewAdaptor adaptor = new ArticleRecViewAdaptor(holder.itemView.getContext(), order.getArticlesNrMap());
+        holder.cardOrderItem.setOnClickListener(v -> callBack.OrderOnClick(order));
+
+        ArticleRecViewAdaptor adaptor = new ArticleRecViewAdaptor(holder.itemView.getContext(), articles);
         holder.recyclerArticlesInOrderItem.setAdapter(adaptor);
         holder.recyclerArticlesInOrderItem.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
     }
@@ -81,25 +101,11 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
         return orders.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
-        private TextView txtOrderDescription;
-        private TextView txtArticles;
-        private CardView cardOrderItem;
-        private RecyclerView recyclerArticlesInOrderItem;
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            txtOrderDescription = itemView.findViewById(R.id.txt_order_description);
-            txtArticles = itemView.findViewById(R.id.txt_articles);
-            cardOrderItem = itemView.findViewById(R.id.order_list_item_parent);
-            recyclerArticlesInOrderItem = itemView.findViewById(R.id.recyclerArticlesInOrderItem);
-        }
-    }
-
-    public void getOrdersFromDB(String url){
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
+    public void getOrdersFromDB(String URL){
         OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(URL)
+                .build();
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(@NonNull Call call, @NonNull IOException e) {
@@ -123,7 +129,7 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
                         orders.add(new Order(orderID, LocalDate.parse(deadline), description, customer, responsible, highlightedOrder));
                     }
                     if(context instanceof Activity){
-                        ((Activity) context).runOnUiThread(() -> setOrders(orders));
+                        ((Activity) context).runOnUiThread(() -> notifyDataSetChanged());
                     }
                 }
                 catch (JSONException e){
@@ -131,5 +137,23 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
                 }
             }
         });
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder{
+        private TextView txtOrderDescription;
+        private TextView txtArticles;
+        private CardView cardOrderItem;
+        private RecyclerView recyclerArticlesInOrderItem;
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            txtOrderDescription = itemView.findViewById(R.id.txt_order_description);
+            txtArticles = itemView.findViewById(R.id.txt_articles);
+            cardOrderItem = itemView.findViewById(R.id.order_list_item_parent);
+            recyclerArticlesInOrderItem = itemView.findViewById(R.id.recyclerArticlesInOrderItem);
+        }
+    }
+
+    public interface CallBack{
+        void OrderOnClick(Order order);
     }
 }

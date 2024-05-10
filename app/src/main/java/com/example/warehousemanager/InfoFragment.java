@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -23,13 +24,12 @@ public class InfoFragment extends Fragment {
 
         recyclerInfoRecentOrder = view.findViewById(R.id.recyclerInfoRecentOrder);
 
-        ArrayList<Order> orders = new ArrayList<>();
-        OrderRecViewAdaptor adaptor = new OrderRecViewAdaptor(getContext(), orders);
-        recyclerInfoRecentOrder.setAdapter(adaptor);
-        recyclerInfoRecentOrder.setLayoutManager(new LinearLayoutManager(getContext()));
+        OrderRecViewAdaptor adaptor = new OrderRecViewAdaptor(getContext());
         //get orders from the database
         String url = DBConst.DB_URL + "get_info_Orders";
         adaptor.getOrdersFromDB(url);
+        recyclerInfoRecentOrder.setAdapter(adaptor);
+        recyclerInfoRecentOrder.setLayoutManager(new LinearLayoutManager(getContext()));
 
         return view;
     }

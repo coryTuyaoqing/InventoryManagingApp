@@ -1,42 +1,72 @@
 package com.example.warehousemanager;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAdaptor.ViewHolder> {
     private Context context;
     private ArrayList<Article> articles;
-    private ArrayList<Integer> articleNr;
+    private ArrayList<Order.ArticleNr> articleNr;
+    private static final String TAG = "ArticleRecViewAdaptor";
 
     public ArticleRecViewAdaptor(Context context, ArrayList<Article> articles) {
         this.context = context;
         this.articles = articles;
-        articleNr = null;
+        articleNr = new ArrayList<>();
     }
 
-    public ArticleRecViewAdaptor(Context context, Map<Article,Integer> articlesNrMap) {
+    public ArticleRecViewAdaptor(Context context, Map<Article, Order.ArticleNr> articlesNrMap) {
         this.context = context;
         articles = new ArrayList<>(articlesNrMap.keySet());
         articleNr = new ArrayList<>(articlesNrMap.values());
+    }
+
+    public ArticleRecViewAdaptor(Context context){
+        this.context = context;
+        articles = new ArrayList<>();
+        articleNr = new ArrayList<>();
     }
 
     public void setArticles(ArrayList<Article> articles) {
         this.articles = articles;
     }
 
-    public void setArticleNr(ArrayList<Integer> articleNr) {
+    public void setArticleNr(ArrayList<Order.ArticleNr> articleNr) {
         this.articleNr = articleNr;
+    }
+
+    public ArrayList<Article> getArticles() {
+        return articles;
+    }
+
+    public ArrayList<Order.ArticleNr> getArticleNr() {
+        return articleNr;
     }
 
     @NonNull
@@ -68,6 +98,49 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
     @Override
     public int getItemCount() {
         return articles.size();
+    }
+
+    public void getArticlesFromDB(String url){
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e(TAG, "onFailure: ", e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                Log.d(TAG, "onResponse: success");
+                try{
+                    assert response.body() != null;
+                    JSONArray responseArray = new JSONArray(response.body().string());
+                    for(int i=0; i<responseArray.length(); i++){
+                        JSONObject responseObject = responseArray.getJSONObject(i);
+                        int articleID = responseObject.getInt("idArticle");
+                        String name = responseObject.getString("name");
+                        String supplierName = responseObject.getString("SupplierName");
+                        double price = responseObject.getDouble("Price");
+                        String color = responseObject.getString("color");
+                        String size = responseObject.getString("size");
+                        articles.add(new Article(articleID, name, supplierName, price, color, size));
+                    }
+                    if(context instanceof Activity){
+                        if(articles.isEmpty() && context instanceof ScanResultActivity){
+                            ((Activity) context).finish();
+                            ((Activity) context).runOnUiThread(() -> Toast.makeText(context, "No article found", Toast.LENGTH_SHORT).show());
+                        }
+                        ((Activity) context).runOnUiThread(() -> notifyDataSetChanged());
+                    }
+                }
+                catch (JSONException e){
+                    Log.e(TAG, "onResponse: parsing", e);
+                }
+            }
+        });
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

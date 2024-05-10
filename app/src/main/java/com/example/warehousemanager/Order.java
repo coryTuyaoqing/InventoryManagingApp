@@ -11,9 +11,7 @@ public class Order {
     private String customer;
     private String responsible;
     private int highlightedOrder;
-
-    private Map<Article,Integer> articlesNrMap;
-    private static final String TAG = "Order";
+    private Map<Article,ArticleNr> articlesNrMap;
 
     public Order(int orderID, LocalDate deadline, String description, String customer, String responsible, int highlightedOrder) {
         this.orderID = orderID;
@@ -23,6 +21,13 @@ public class Order {
         this.responsible = responsible;
         this.highlightedOrder = highlightedOrder;
         this.articlesNrMap = new HashMap<>();
+    }
+
+    public Order(int orderID, String description, LocalDate deadline, Map<Article, ArticleNr> articlesNrMap) {
+        this.orderID = orderID;
+        this.description = description;
+        this.deadline = deadline;
+        this.articlesNrMap = articlesNrMap;
     }
 
     public int getOrderID() {
@@ -52,11 +57,37 @@ public class Order {
         return customer;
     }
 
-    public Map<Article, Integer> getArticlesNrMap() {
+    public Map<Article, ArticleNr> getArticlesNrMap() {
         return articlesNrMap;
     }
 
-    public Integer putArticle(Article article, Integer number){
-        return articlesNrMap.put(article, number);
+    public void putArticle(Article article, ArticleNr articleNr){
+        articlesNrMap.put(article, articleNr);
+    }
+
+    public void putArticle(Article article, int requiredNr, int finishedNr){
+        articlesNrMap.put(article, new ArticleNr(requiredNr, finishedNr));
+    }
+
+    public static class ArticleNr{
+        private int requiredNr;
+        private int finishedNr;
+
+        public ArticleNr(int requiredNr, int finishedNr) {
+            this.requiredNr = requiredNr;
+            this.finishedNr = finishedNr;
+        }
+
+        public int getRequiredNr() {
+            return requiredNr;
+        }
+
+        public int getFinishedNr() {
+            return finishedNr;
+        }
+
+        public void setFinishedNr(int finishedNr) {
+            this.finishedNr = finishedNr;
+        }
     }
 }

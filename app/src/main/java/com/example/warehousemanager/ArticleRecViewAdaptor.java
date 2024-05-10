@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -48,13 +49,20 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.txtArticleName.setText(articles.get(position).getArticleName());
-        if(articleNr == null){
-            holder.txtArticleInfo.setText(articles.get(position).toString());
-        }
-        else{
-            holder.txtArticleInfo.setText("Number: " + articleNr.get(position));
-        }
+        Article article = articles.get(position);
+
+        // Set click listener for the item
+        holder.cardArticleItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Create and show the dialog when the item is clicked
+                showArticleDetailsDialog(article);
+            }
+        });
+
+        // Bind article data to the views
+        holder.txtArticleName.setText(article.getArticleName());
+        holder.txtArticleInfo.setText("Color: " + article.getColor() + ", Size: " + article.getSize());
     }
 
     @Override
@@ -72,5 +80,10 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
             txtArticleInfo = itemView.findViewById(R.id.txt_articles_info);
             cardArticleItem = itemView.findViewById(R.id.articles_list_parent);
         }
+    }
+
+    private void showArticleDetailsDialog(Article article) {
+        ArticleDetailsDialogFragment dialogFragment = new ArticleDetailsDialogFragment(article);
+        dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "ArticleDetailsDialog");
     }
 }

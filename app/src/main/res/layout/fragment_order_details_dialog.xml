@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/dialog_order_details"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -10,15 +9,60 @@
         android:id="@+id/order_id_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:text="Order ID: "
         android:textSize="18sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
 
-    <Button
-        android:id="@+id/Dialog_Back"
+    <TextView
+        android:id="@+id/deadline_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/back" />
+        android:text="Deadline: "
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/reference_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reference: "
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/customer_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Customer: "
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/responsible_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Responsible: "
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/highlighted_order_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Highlighted Order: "
+        android:textSize="16sp"
+        android:textStyle="normal"
+        android:layout_marginBottom="16dp"/>
+
+    <Button
+        android:id="@+id/close_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Close" />
 
 </LinearLayout>

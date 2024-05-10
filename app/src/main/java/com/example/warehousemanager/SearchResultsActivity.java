@@ -95,10 +95,14 @@ public class SearchResultsActivity extends AppCompatActivity {
             String deadlineString = jsonObject.getString("deadline");
             LocalDate deadline = LocalDate.parse(deadlineString);
             String reference = jsonObject.getString("reference");
-            orders.add(new Order(id, deadline, reference));
+            String customer = jsonObject.getString("Customer");
+            String responsible = jsonObject.getString("Responsible");
+            int highlightedOrder = jsonObject.getInt("HighlightedOrder");
+            orders.add(new Order(id, deadline, reference, customer, responsible, highlightedOrder));
         }
         return orders;
     }
+
 
     private ArrayList<Article> parseArticles(JSONArray jsonArray) throws JSONException {
         ArrayList<Article> articles = new ArrayList<>();

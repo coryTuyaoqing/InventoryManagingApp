@@ -23,10 +23,22 @@ public class OrderDetailsDialogFragment extends DialogFragment {
 
         // Initialize views and display order details
         TextView orderIdTextView = view.findViewById(R.id.order_id_text_view);
+        TextView deadlineTextView = view.findViewById(R.id.deadline_text_view);
+        TextView referenceTextView = view.findViewById(R.id.reference_text_view);
+        TextView customerTextView = view.findViewById(R.id.customer_text_view);
+        TextView responsibleTextView = view.findViewById(R.id.responsible_text_view);
+        TextView highlightedOrderTextView = view.findViewById(R.id.highlighted_order_text_view);
+
         orderIdTextView.setText("Order ID: " + order.getOrderID());
+        deadlineTextView.setText("Deadline: " + order.getDeadline());
+        referenceTextView.setText("Reference: " + order.getDescription());
+        customerTextView.setText("Customer: "+ order.getCustomer());
+        responsibleTextView.setText("Responsible: "+ order.getResponsible());
+        highlightedOrderTextView.setText("Highlighted: "+ order.getHighlightedOrder());
+
 
         // Handle close button click
-        Button closeButton = view.findViewById(R.id.Dialog_Back);
+        Button closeButton = view.findViewById(R.id.close_button);
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

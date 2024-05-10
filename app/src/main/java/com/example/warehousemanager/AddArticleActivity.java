@@ -22,11 +22,11 @@ public class AddArticleActivity extends AppCompatActivity {
         Article t_shirt = new Article(1, "t_shirt", "red", "L");
         Article shoes = new Article(2, "shoes", "black", "42");
 
-        Order order1 = new Order(1, LocalDate.of(2024,5,2), "test");
+        Order order1 = new Order(1, LocalDate.of(2024,5,2), "test", "testname", "testname2", 0);
         order1.putArticle(t_shirt, 3);
         order1.putArticle(shoes, 10);
 
-        Order order2 = new Order(2, LocalDate.of(2023,7,1), "");
+        Order order2 = new Order(2, LocalDate.of(2023,7,1), "test", "testname", "testname2", 0);
         order2.putArticle(t_shirt, 100);
         order2.putArticle(shoes, 50);
 

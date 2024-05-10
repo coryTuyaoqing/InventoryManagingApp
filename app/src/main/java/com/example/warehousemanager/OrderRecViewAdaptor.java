@@ -117,7 +117,10 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
                         int orderID = responseObject.getInt("idOrder");
                         String deadline = responseObject.getString("deadline");
                         String description = responseObject.getString("reference");
-                        orders.add(new Order(orderID, LocalDate.now(), description));
+                        String customer = responseObject.getString("Customer");
+                        String responsible = responseObject.getString("Responsible");
+                        int highlightedOrder = responseObject.getInt("HighlightedOrder");
+                        orders.add(new Order(orderID, LocalDate.parse(deadline), description, customer, responsible, highlightedOrder));
                     }
                     if(context instanceof Activity){
                         ((Activity) context).runOnUiThread(() -> setOrders(orders));

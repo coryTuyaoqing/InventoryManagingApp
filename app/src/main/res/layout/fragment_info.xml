@@ -12,13 +12,13 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/txtInfoRecentOrder"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Recent Order"
-            android:textStyle="bold"
+            android:layout_gravity="start"
+            android:text="Recent Activity"
             android:textSize="30sp"
-            android:id="@+id/txtInfoRecentOrder"
-            android:layout_gravity="start"/>
+            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="wrap_content"

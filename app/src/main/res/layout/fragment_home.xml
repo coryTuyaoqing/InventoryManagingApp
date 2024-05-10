@@ -12,13 +12,13 @@
         android:layout_margin="40dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/txtHomeHighlight"
+            android:layout_width="266dp"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:text="High Light Order"
+            android:text="highlighted Orders"
             android:textSize="30sp"
-            android:textStyle="bold"
-            android:id="@+id/txtHomeHighlight"/>
+            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerHomeHighLight"

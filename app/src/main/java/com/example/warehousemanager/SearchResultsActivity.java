@@ -49,6 +49,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             if ("Order".equals(searchType)) {
                 ArrayList<Order> orders = parseOrders(searchResultsArray);
                 adapter = new OrderRecViewAdaptor(this, orders);
+
             } else if ("Article".equals(searchType)) {
                 ArrayList<Article> articles = parseArticles(searchResultsArray);
                 adapter = new ArticleRecViewAdaptor(this, articles);

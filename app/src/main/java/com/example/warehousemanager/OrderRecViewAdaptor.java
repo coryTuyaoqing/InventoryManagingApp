@@ -41,9 +41,16 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
     }; //default callback function
     private static final String TAG = "OrderRecViewAdaptor";
 
-    public OrderRecViewAdaptor(Context context, ArrayList<Order> orders) {
+    public OrderRecViewAdaptor(Context context, ArrayList<Order> orders) throws JSONException {
         this.context = context;
         this.orders = orders;
+        for(Order order: orders){
+            order.getArticlesOfOrders(o -> {
+                if(context instanceof Activity){
+                    ((Activity)context).runOnUiThread(() -> notifyDataSetChanged());
+                }
+            });
+        }
     }
 
     public OrderRecViewAdaptor(Context context) {
@@ -51,10 +58,17 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
         orders = new ArrayList<>();
     }
 
-    public OrderRecViewAdaptor(Context context, ArrayList<Order> orders, CallBack callBack) {
+    public OrderRecViewAdaptor(Context context, ArrayList<Order> orders, CallBack callBack) throws JSONException {
         this.context = context;
         this.orders = orders;
         this.callBack = callBack;
+        for(Order order: orders){
+            order.getArticlesOfOrders(o -> {
+                if(context instanceof Activity){
+                    ((Activity)context).runOnUiThread(() -> notifyDataSetChanged());
+                }
+            });
+        }
     }
 
     public OrderRecViewAdaptor(Context context, CallBack callBack) {
@@ -66,6 +80,10 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
     public void setOrders(ArrayList<Order> orders) {
         this.orders = orders;
         notifyDataSetChanged();
+    }
+
+    public ArrayList<Order> getOrders() {
+        return orders;
     }
 
     @NonNull

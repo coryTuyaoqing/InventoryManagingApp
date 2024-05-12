@@ -172,7 +172,7 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
     }
 
     private void showArticleDetailsDialog(Article article) {
-        ArticleDetailsDialogFragment dialogFragment = new ArticleDetailsDialogFragment(article);
+        ArticleDetailsDialogFragment dialogFragment = new ArticleDetailsDialogFragment(article, context);
         dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "ArticleDetailsDialog");
     }
 }

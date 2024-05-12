@@ -18,6 +18,7 @@
     <string name="StaffId">ID:</string>
     <string name="SearchResults">Search Results:</string>
     <string name="SelectedFilters">Selected Filters:</string>
+    <string name="EditQuantities">Edit</string>
     <string-array name="types_array">
         <item>Order</item>
         <item>Article</item>
@@ -33,7 +34,6 @@
         <item>color</item>
         <item>size</item>
     </string-array>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 

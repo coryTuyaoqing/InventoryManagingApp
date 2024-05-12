@@ -51,6 +51,12 @@
         android:layout_marginBottom="8dp"/>
 
     <Button
+        android:id="@+id/EditQuantities"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/EditQuantities" />
+
+    <Button
         android:id="@+id/Dialog_Back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

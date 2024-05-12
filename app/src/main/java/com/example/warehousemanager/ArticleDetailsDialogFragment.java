@@ -1,5 +1,6 @@
 package com.example.warehousemanager;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,13 +9,17 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 
 public class ArticleDetailsDialogFragment extends DialogFragment {
 
     private Article article;
+    private Context context;
+    private Button editButton;
 
-    public ArticleDetailsDialogFragment(Article article) {
+    public ArticleDetailsDialogFragment(Article article, Context context) {
         this.article = article;
+        this.context = context;
     }
 
     @Override
@@ -46,6 +51,30 @@ public class ArticleDetailsDialogFragment extends DialogFragment {
             }
         });
 
+        editButton = view.findViewById(R.id.EditQuantities);
+        toggleEditButtonVisibility();
+
         return view;
     }
+
+    private void toggleEditButtonVisibility() {
+        if (context instanceof SearchResultsActivity) {
+            editButton.setVisibility(View.VISIBLE);
+            editButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showEditQuantitiesDialogFragment(article);
+                    dismiss();
+                }
+            });
+        } else {
+            editButton.setVisibility(View.GONE);
+        }
+    }
+
+    private void showEditQuantitiesDialogFragment(Article article) {
+        EditQuantitiesDialogFragment dialogFragment = new EditQuantitiesDialogFragment(article);
+        dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "EditQuantitiesDialog");
+    }
 }
+

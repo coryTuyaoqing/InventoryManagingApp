@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,12 +30,19 @@ import okhttp3.Response;
 public class AddArticleDialogFragment extends DialogFragment {
     Order order;
     Article article;
+    int inStockNr, requiredNr;
     Spinner spinnerAddArticleDialog;
+    Button btnAddArticleDialog;
+    EditText edtTxtAddArticleDialog;
     private static final String TAG = "AddArticleDialogFragment";
 
     public AddArticleDialogFragment(Order order, Article article) {
         this.order = order;
         this.article = article;
+        Order.ArticleNr nr = order.getArticlesNrMap().get(article);
+        assert nr != null;
+        inStockNr = nr.getInStockNr();
+        requiredNr = nr.getRequiredNr();
     }
 
     @Override
@@ -42,11 +51,13 @@ public class AddArticleDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_add_article_dialog, container, false);
 
         spinnerAddArticleDialog = view.findViewById(R.id.spinnerAddArticleDialog);
+        edtTxtAddArticleDialog = view.findViewById(R.id.edtTxtAddArticleDialog);
+        btnAddArticleDialog = view.findViewById(R.id.btnAddArticleDialog);
 
         ArrayList<Integer> articleNrs = new ArrayList<>();
-        articleNrs.add(0);
-        articleNrs.add(1);
-        articleNrs.add(2);
+        for(int i=0; i<40; i++){
+            articleNrs.add(i);
+        }
 
         ArrayAdapter<Integer> articleNrAdaptor = new ArrayAdapter<>(
                 requireContext(),
@@ -69,17 +80,18 @@ public class AddArticleDialogFragment extends DialogFragment {
             }
         });
 
+        btnAddArticleDialog.setOnClickListener(v -> {
+            int addNr = Integer.parseInt(edtTxtAddArticleDialog.getText().toString());
+            addArticleToOrder(addNr);
+        });
+
 
         return view;
     }
 
     private void addArticleToOrder(int addNr) {
-        Log.d(TAG, "addArticleToOrder: " + order + article);
+        Log.d(TAG, "addArticleToOrder: ");
         //check if in stock number exceed required number
-        Order.ArticleNr nr = order.getArticlesNrMap().get(article);
-        assert nr != null;
-        int inStockNr = nr.getInStockNr();
-        int requiredNr = nr.getRequiredNr();
         if(inStockNr + addNr > requiredNr){
             requireActivity().runOnUiThread(() -> {
                 Toast.makeText(getActivity(), "only " + (requiredNr - inStockNr) + "more can be added", Toast.LENGTH_SHORT).show();

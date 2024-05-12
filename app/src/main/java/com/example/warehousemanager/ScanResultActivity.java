@@ -2,16 +2,10 @@ package com.example.warehousemanager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -46,13 +40,31 @@ public class ScanResultActivity extends AppCompatActivity {
         recyclerArticleScanResult.setLayoutManager(new LinearLayoutManager(this));
 
         //customize order recycler view with customize order detail dialog fragment
-        orderRecViewAdaptor = new OrderRecViewAdaptor(this, order -> {
+        orderRecViewAdaptor = new OrderRecViewAdaptor(this, orderOnClickCallBack);
+        url = DBConst.DB_URL + "get_order_from_article/" + barcodeNr;
+        orderRecViewAdaptor.getOrdersFromDB(url);
+        recyclerOrdersScanRelative.setAdapter(orderRecViewAdaptor);
+        recyclerOrdersScanRelative.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private final OrderRecViewAdaptor.CallBack orderOnClickCallBack = new OrderRecViewAdaptor.CallBack() {
+        @Override
+        public void OrderOnClick(Order order) {
+            //check if order is complete
+            Article article = articleRecViewAdaptor.getArticles().get(0);
+            Order.ArticleNr nr = order.getArticlesNrMap().get(article);
+            int inStockNr = nr.getInStockNr();
+            int requiredNr = nr.getRequiredNr();
+            if(inStockNr == requiredNr){
+                Toast.makeText(ScanResultActivity.this, "The order is complete", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             OrderDetailsDialogFragment orderDetailsDialogFragment = new OrderDetailsDialogFragment(order);
             orderDetailsDialogFragment.setAddView(layout -> { //add bottom to the dialog window for adding article
                 Button btnAddArticleToOrder = new Button(layout.getContext());
                 btnAddArticleToOrder.setText("Add article to\nthis order");
                 btnAddArticleToOrder.setOnClickListener(v -> {
-                    Article article = articleRecViewAdaptor.getArticles().get(0);
                     AddArticleDialogFragment addArticleDialogFragment = new AddArticleDialogFragment(order, article);
                     addArticleDialogFragment.show(getSupportFragmentManager(), "add article to order");
                     orderDetailsDialogFragment.dismiss();
@@ -60,10 +72,6 @@ public class ScanResultActivity extends AppCompatActivity {
                 layout.addView(btnAddArticleToOrder);
             });
             orderDetailsDialogFragment.show(getSupportFragmentManager(), "OrderDetailsDialog");
-        });
-        url = DBConst.DB_URL + "get_order_from_article/" + barcodeNr;
-        orderRecViewAdaptor.getOrdersFromDB(url);
-        recyclerOrdersScanRelative.setAdapter(orderRecViewAdaptor);
-        recyclerOrdersScanRelative.setLayoutManager(new LinearLayoutManager(this));
-    }
+        }
+    };
 }

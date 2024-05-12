@@ -18,8 +18,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.warehousemanager.SearchResultsActivity;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 

@@ -31,6 +31,7 @@ import okhttp3.Response;
 
 public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAdaptor.ViewHolder> {
     private Context context;
+    private Order order;
     private ArrayList<Article> articles;
     private ArrayList<Order.ArticleNr> articleNr;
     private static final String TAG = "ArticleRecViewAdaptor";
@@ -41,8 +42,9 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
         articleNr = new ArrayList<>();
     }
 
-    public ArticleRecViewAdaptor(Context context, Map<Article, Order.ArticleNr> articlesNrMap) {
+    public ArticleRecViewAdaptor(Context context, Map<Article, Order.ArticleNr> articlesNrMap, Order order) {
         this.context = context;
+        this.order = order;
         articles = new ArrayList<>(articlesNrMap.keySet());
         articleNr = new ArrayList<>(articlesNrMap.values());
     }
@@ -172,7 +174,7 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
     }
 
     private void showArticleDetailsDialog(Article article) {
-        ArticleDetailsDialogFragment dialogFragment = new ArticleDetailsDialogFragment(article, context);
+        ArticleDetailsDialogFragment dialogFragment = new ArticleDetailsDialogFragment(article, context, order);
         dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "ArticleDetailsDialog");
     }
 }

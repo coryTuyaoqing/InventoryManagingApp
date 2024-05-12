@@ -105,7 +105,7 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
         holder.txtOrderDescription.setText(order.getDescription());
         holder.txtArticles.setText("Deadline: " + order.getDeadline().toString());
 
-        ArticleRecViewAdaptor adaptor = new ArticleRecViewAdaptor(holder.itemView.getContext(), articles);
+        ArticleRecViewAdaptor adaptor = new ArticleRecViewAdaptor(holder.itemView.getContext(), articles, order);
         holder.recyclerArticlesInOrderItem.setAdapter(adaptor);
         holder.recyclerArticlesInOrderItem.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
     }

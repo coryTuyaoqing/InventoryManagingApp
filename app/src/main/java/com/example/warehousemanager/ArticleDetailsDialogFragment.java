@@ -16,10 +16,12 @@ public class ArticleDetailsDialogFragment extends DialogFragment {
     private Article article;
     private Context context;
     private Button editButton;
+    private Order order;
 
-    public ArticleDetailsDialogFragment(Article article, Context context) {
+    public ArticleDetailsDialogFragment(Article article, Context context, Order order) {
         this.article = article;
         this.context = context;
+        this.order  = order;
     }
 
     @Override
@@ -73,7 +75,7 @@ public class ArticleDetailsDialogFragment extends DialogFragment {
     }
 
     private void showEditQuantitiesDialogFragment(Article article) {
-        EditQuantitiesDialogFragment dialogFragment = new EditQuantitiesDialogFragment(article);
+        EditQuantitiesDialogFragment dialogFragment = new EditQuantitiesDialogFragment(article, order);
         dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "EditQuantitiesDialog");
     }
 }

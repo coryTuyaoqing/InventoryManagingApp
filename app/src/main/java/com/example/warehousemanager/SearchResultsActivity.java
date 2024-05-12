@@ -130,7 +130,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             String[] articleFilters = getResources().getStringArray(R.array.filter_article);
             return articleFilters[index];
         }
-        return ""; // Return empty string if searchType is not recognized
+        return "";
     }
 
     private void displayNoResultsMessage() {

@@ -81,13 +81,11 @@ public class EditQuantitiesDialogFragment extends DialogFragment {
                         final String responseData = response.body().string();
                         final JSONArray jsonArray = new JSONArray(responseData);
 
-                        // Parse JSON array and set values to EditText fields
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 try {
                                     System.out.println(jsonArray);
-                                    // Assuming the JSON array has two values: required and in-stock
                                     JSONObject jsonObject = jsonArray.getJSONObject(0);
                                     String required = jsonObject.getString("ArticleRequired");
                                     String inStock = jsonObject.getString("ArticlesInStock");

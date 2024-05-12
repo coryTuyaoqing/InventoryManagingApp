@@ -75,7 +75,7 @@ public class ArticleDetailsDialogFragment extends DialogFragment {
     }
 
     private void showEditQuantitiesDialogFragment(Article article) {
-        EditQuantitiesDialogFragment dialogFragment = new EditQuantitiesDialogFragment(article, order);
+        EditQuantitiesDialogFragment dialogFragment = new EditQuantitiesDialogFragment(context, article, order);
         dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "EditQuantitiesDialog");
     }
 }

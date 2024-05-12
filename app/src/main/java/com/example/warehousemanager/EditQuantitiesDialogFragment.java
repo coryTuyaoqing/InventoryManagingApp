@@ -1,5 +1,6 @@
 package com.example.warehousemanager;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,9 +31,13 @@ public class EditQuantitiesDialogFragment extends DialogFragment {
 
     private Article article;
     private Order order;
+    private Context context;
+    private EditText RequiredEditText;
+    private EditText InStockEditText;
     private static final OkHttpClient client = new OkHttpClient();
 
-    public EditQuantitiesDialogFragment(Article article, Order order) {
+    public EditQuantitiesDialogFragment(Context context, Article article, Order order) {
+        this.context = context;
         this.article = article;
         this.order = order;
     }
@@ -45,14 +50,15 @@ public class EditQuantitiesDialogFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_quantities_dialog, container, false);
-        EditText RequiredEditText = view.findViewById(R.id.RequiredInput);
-        EditText InStockEditText = view.findViewById(R.id.InStockInput);
+        RequiredEditText = view.findViewById(R.id.RequiredInput);
+        InStockEditText = view.findViewById(R.id.InStockInput);
         Button saveButton = view.findViewById(R.id.save_button);
         fetchRequiredAndInStock(RequiredEditText, InStockEditText);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Save();
                 dismiss();
             }
         });
@@ -80,7 +86,6 @@ public class EditQuantitiesDialogFragment extends DialogFragment {
                     try {
                         final String responseData = response.body().string();
                         final JSONArray jsonArray = new JSONArray(responseData);
-
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -90,9 +95,7 @@ public class EditQuantitiesDialogFragment extends DialogFragment {
                                     String required = jsonObject.getString("ArticleRequired");
                                     String inStock = jsonObject.getString("ArticlesInStock");
                                     requiredEditText.setText(required);
-                                    System.out.println(required);
                                     inStockEditText.setText(inStock);
-                                    System.out.println(inStock);
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                     showToast("Failed to parse data");
@@ -108,6 +111,40 @@ public class EditQuantitiesDialogFragment extends DialogFragment {
                 }
             }
         });
+    }
+
+    public void Save(){
+        try {
+            String requiredInput = RequiredEditText.getText().toString();
+            String inStockInput = InStockEditText.getText().toString();
+
+            String url = "https://studev.groept.be/api/a23PT308/Edit_ArticleInOrder/";
+            url = url + requiredInput + "/" + inStockInput + "/" + order.getOrderID() + "/" + article.getIdArticle();
+            System.out.println(url);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                    e.printStackTrace();
+                    showToast("Failed to fetch data");
+                }
+
+                @Override
+                public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        showToast("Data saved");
+                    }
+                    else {
+                        showToast("Failed to save data");
+                    }
+                }
+            });
+        } catch (NumberFormatException e) {
+            showToast("Invalid input. Please enter valid integers.");
+        }
     }
 
     private void showToast(String message) {

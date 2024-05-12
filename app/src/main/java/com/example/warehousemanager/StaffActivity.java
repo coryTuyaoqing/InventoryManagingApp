@@ -53,7 +53,6 @@ public class StaffActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     assert response.body() != null;
                     String responseData = response.body().string();
-                    System.out.println("success to get staff data");
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

@@ -17,6 +17,7 @@ public class ArticleDetailsDialogFragment extends DialogFragment {
     private Context context;
     private Button editButton;
     private Order order;
+    private Staff staff;
 
     public ArticleDetailsDialogFragment(Article article, Context context, Order order) {
         this.article = article;
@@ -44,6 +45,9 @@ public class ArticleDetailsDialogFragment extends DialogFragment {
         TextView sizeTextView = view.findViewById(R.id.size_text_view);
         sizeTextView.setText("Size: " + article.getSize());
 
+        staff = Staff.getStaff(requireActivity().getApplicationContext());
+        staff.readFile();
+
         // Handle close button click
         Button closeButton = view.findViewById(R.id.Dialog_Back);
         closeButton.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +64,8 @@ public class ArticleDetailsDialogFragment extends DialogFragment {
     }
 
     private void toggleEditButtonVisibility() {
-        if (context instanceof SearchResultsActivity) {
+        int PermissionLevel = Integer.parseInt(staff.getPermission());
+        if (context instanceof SearchResultsActivity && PermissionLevel >= 2) {
             editButton.setVisibility(View.VISIBLE);
             editButton.setOnClickListener(new View.OnClickListener() {
                 @Override

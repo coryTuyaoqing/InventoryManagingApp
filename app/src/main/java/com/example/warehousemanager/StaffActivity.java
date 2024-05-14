@@ -74,15 +74,6 @@ public class StaffActivity extends AppCompatActivity {
                 saveStaffData();
             }
         });
-
-        Button backButton = findViewById(R.id.backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(StaffActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     public void populateTable(String data) {

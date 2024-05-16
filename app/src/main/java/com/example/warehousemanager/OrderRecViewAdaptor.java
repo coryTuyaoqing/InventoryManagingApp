@@ -97,7 +97,7 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Order order = orders.get(position);
-        Map<Article, Order.ArticleNr> articles = order.getArticlesNrMap();
+        Map<Article, Order.ArticleNr> articlesNrMap = order.getArticlesNrMap();
 
         holder.cardOrderItem.setOnClickListener(v -> callBack.OrderOnClick(order));
 
@@ -105,7 +105,7 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
         holder.txtOrderDescription.setText(order.getDescription());
         holder.txtArticles.setText("Deadline: " + order.getDeadline().toString());
 
-        ArticleRecViewAdaptor adaptor = new ArticleRecViewAdaptor(holder.itemView.getContext(), articles, order);
+        ArticleRecViewAdaptor adaptor = new ArticleRecViewAdaptor(holder.itemView.getContext(), articlesNrMap);
         holder.recyclerArticlesInOrderItem.setAdapter(adaptor);
         holder.recyclerArticlesInOrderItem.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
     }

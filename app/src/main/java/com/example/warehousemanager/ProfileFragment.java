@@ -23,7 +23,6 @@ public class ProfileFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         Staff staff = Staff.getStaff(requireActivity().getApplicationContext());
-        staff.readFile();
 
         txtProfileID = view.findViewById(R.id.txtProfileID);
         txtProfilePermission = view.findViewById(R.id.txtProfilePermission);
@@ -39,7 +38,7 @@ public class ProfileFragment extends Fragment {
             OpenStaffManager.setVisibility(View.GONE);
         }
         txtProfileID.setText("ID: " + staff.getStaffID());
-        txtProfileName.setText("Name: " + staff.getName());
+        txtProfileName.setText(staff.getName());
         txtProfilePermission.setText("Permission: " + staff.getPermission());
         txtProfileEmail.setText(staff.getEmail());
 

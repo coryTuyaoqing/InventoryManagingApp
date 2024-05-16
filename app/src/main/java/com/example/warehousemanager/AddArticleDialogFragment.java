@@ -15,11 +15,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
-import com.google.zxing.client.android.Intents;
-
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Objects;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -55,7 +54,7 @@ public class AddArticleDialogFragment extends DialogFragment {
         btnAddArticleDialog = view.findViewById(R.id.btnAddArticleDialog);
 
         ArrayList<Integer> articleNrs = new ArrayList<>();
-        for(int i=0; i<40; i++){
+        for(int i=0; i<requiredNr; i++){
             articleNrs.add(i);
         }
 
@@ -94,7 +93,7 @@ public class AddArticleDialogFragment extends DialogFragment {
         //check if in stock number exceed required number
         if(inStockNr + addNr > requiredNr){
             requireActivity().runOnUiThread(() -> {
-                Toast.makeText(getActivity(), "only " + (requiredNr - inStockNr) + "more can be added", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "only " + (requiredNr - inStockNr) + " more can be added", Toast.LENGTH_SHORT).show();
             });
             return;
         }
@@ -121,6 +120,32 @@ public class AddArticleDialogFragment extends DialogFragment {
                     dismiss();
                 });
                 requireActivity().finish();
+            }
+        });
+
+        //record add article
+        Staff staff = Staff.getStaff(requireContext().getApplicationContext());
+        String staffID = staff.getStaffID();
+
+        url = DBConst.DB_URL + "add_article_recode/" 
+                + staffID + "/" 
+                + orderID + "/" 
+                +articleID + "/" 
+                + addNr + "/" 
+                + LocalDate.now().toString() + "+" + LocalTime.now().toString();
+        request = new Request.Builder()
+            .url(url)
+            .build();
+        
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e(TAG, "onFailure: ", e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                Log.d(TAG, "onResponse: ");
             }
         });
     }

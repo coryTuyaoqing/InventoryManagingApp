@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
         //check if the user already login
         Staff staff = Staff.getStaff(getApplicationContext());
         if (staff.fileExist()) {
+            staff.readFile();
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
             finish();
         }

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
     RecyclerView recyclerHome;
+    OrderRecViewAdaptor adaptor;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -23,7 +24,7 @@ public class HomeFragment extends Fragment {
 
         //initialize recycler view
         recyclerHome = view.findViewById(R.id.recyclerHomeHighLight);
-        OrderRecViewAdaptor adaptor = new OrderRecViewAdaptor(getContext());
+        adaptor = new OrderRecViewAdaptor(getContext());
         //get orders from the database
         String url = DBConst.DB_URL + "get_highlighted_orders";
         adaptor.getOrdersFromDB(url);

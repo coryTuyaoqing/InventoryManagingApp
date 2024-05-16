@@ -2,6 +2,7 @@ package com.example.warehousemanager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -31,7 +34,6 @@ import okhttp3.Response;
 
 public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAdaptor.ViewHolder> {
     private Context context;
-    private Order order;
     private ArrayList<Article> articles;
     private ArrayList<Order.ArticleNr> articleNr;
     private static final String TAG = "ArticleRecViewAdaptor";
@@ -42,9 +44,8 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
         articleNr = new ArrayList<>();
     }
 
-    public ArticleRecViewAdaptor(Context context, Map<Article, Order.ArticleNr> articlesNrMap, Order order) {
+    public ArticleRecViewAdaptor(Context context, Map<Article, Order.ArticleNr> articlesNrMap) {
         this.context = context;
-        this.order = order;
         articles = new ArrayList<>(articlesNrMap.keySet());
         articleNr = new ArrayList<>(articlesNrMap.values());
     }
@@ -96,19 +97,32 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
         holder.txtArticleName.setText(article.getArticleName());
         holder.txtArticleInfo.setText("Color: " + article.getColor() + ", Size: " + article.getSize());
 
-        if(!articleNr.isEmpty()){
+        if(article instanceof ArticleInOrder){
             Order.ArticleNr nr = articleNr.get(position);
+            int inStockNr = nr.getInStockNr();
+            int requiredNr = nr.getRequiredNr();
+
+            if(inStockNr == requiredNr){
+                setBackgroundColor(holder.cardArticleItem, R.color.dark_color);
+                return;
+            }
+
             TextView txtArticleInStock = new TextView(context);
-            txtArticleInStock.setText("In stock: " + nr.getInStockNr());
+            txtArticleInStock.setText("In stock: " + inStockNr);
             txtArticleInStock.setTextColor(context.getResources().getColor(R.color.purple));
 
             TextView txtArticleRequired = new TextView(context);
-            txtArticleRequired.setText("Required: " + nr.getRequiredNr());
+            txtArticleRequired.setText("Required: " + requiredNr);
             txtArticleRequired.setTextColor(context.getResources().getColor(R.color.purple));
 
             holder.linearArticleItem.addView(txtArticleRequired);
             holder.linearArticleItem.addView(txtArticleInStock);
+
         }
+    }
+
+    private void setBackgroundColor(View view, int color) {
+        ViewCompat.setBackgroundTintList(view, ColorStateList.valueOf(ContextCompat.getColor(context, color)));
     }
 
     @Override
@@ -174,7 +188,7 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
     }
 
     private void showArticleDetailsDialog(Article article) {
-        ArticleDetailsDialogFragment dialogFragment = new ArticleDetailsDialogFragment(article, context, order);
+        ArticleDetailsDialogFragment dialogFragment = new ArticleDetailsDialogFragment(article, context);
         dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "ArticleDetailsDialog");
     }
 }

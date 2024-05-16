@@ -3,34 +3,101 @@ package com.example.warehousemanager;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class InfoFragment extends Fragment {
-    RecyclerView recyclerInfoRecentOrder;
+    private RecyclerView recyclerInfoRecentOrder;
+    private RecordRecViewAdapter adapter;
+    private ArrayList<Record> records;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view  = inflater.inflate(R.layout.fragment_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_info, container, false);
 
         recyclerInfoRecentOrder = view.findViewById(R.id.recyclerInfoRecentOrder);
-
-        OrderRecViewAdaptor adaptor = new OrderRecViewAdaptor(getContext());
-        //get orders from the database
-        String url = DBConst.DB_URL + "get_info_Orders";
-        adaptor.getOrdersFromDB(url);
-        recyclerInfoRecentOrder.setAdapter(adaptor);
+        records = new ArrayList<>();
+        adapter = new RecordRecViewAdapter(getContext(), records);
+        recyclerInfoRecentOrder.setAdapter(adapter);
         recyclerInfoRecentOrder.setLayoutManager(new LinearLayoutManager(getContext()));
 
+
+        fetchRecordsFromDB();
+
         return view;
+    }
+
+    private void fetchRecordsFromDB() {
+        OkHttpClient client = new OkHttpClient();
+        String url = "https://studev.groept.be/api/a23PT308/get_info_HandleRecords";
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    try {
+                        JSONArray responseArray = new JSONArray(response.body().string());
+                        records.clear();
+                        for (int i = 0; i < responseArray.length(); i++) {
+                            JSONObject recordObject = responseArray.getJSONObject(i);
+                            int idRecord = recordObject.getInt("idRecord");
+                            int idStaff = recordObject.getInt("idStaff");
+                            int idOrder = recordObject.getInt("idOrder");
+                            int idArticle = recordObject.getInt("idArticle");
+                            int articleNr = recordObject.getInt("articleNr");
+                            String operationTime = recordObject.getString("operationTime");
+
+                            Record record = new Record(idRecord, idStaff, idOrder, idArticle, articleNr, operationTime);
+                            records.add(record);
+                        }
+                        getActivity().runOnUiThread(() -> adapter.notifyDataSetChanged());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    public void setRecords(int number) {
+        Collections.sort(records, new Comparator<Record>() {
+            @Override
+            public int compare(Record o1, Record o2) {
+                return o2.getOperationTimeAsDate().compareTo(o1.getOperationTimeAsDate());
+            }
+        });
+
+        int size = Math.min(records.size(), number);
+        ArrayList<Record> recentRecords = new ArrayList<>(records.subList(0, size));
+
+        this.records = recentRecords;
     }
 }

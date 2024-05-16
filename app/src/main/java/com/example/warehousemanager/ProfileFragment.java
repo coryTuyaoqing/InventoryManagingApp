@@ -59,13 +59,8 @@ public class ProfileFragment extends Fragment {
         OpenStaffManager.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(staff.deleteFile()){
-                    Intent intent = new Intent(requireContext(), StaffActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    requireActivity().finish();
-                }
-
+                Intent intent = new Intent(requireContext(), StaffActivity.class);
+                startActivity(intent);
             }
         });
 

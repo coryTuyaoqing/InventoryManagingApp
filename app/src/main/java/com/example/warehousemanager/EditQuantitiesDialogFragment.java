@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,17 +30,17 @@ public class EditQuantitiesDialogFragment extends DialogFragment {
     private static final String ARG_ARTICLE = "article";
     private static final String ARG_ORDER = "order";
 
-    private Article article;
+    private ArticleInOrder article;
     private Order order;
     private Context context;
     private EditText RequiredEditText;
     private EditText InStockEditText;
     private static final OkHttpClient client = new OkHttpClient();
 
-    public EditQuantitiesDialogFragment(Context context, Article article, Order order) {
+    public EditQuantitiesDialogFragment(Context context, ArticleInOrder article) {
         this.context = context;
         this.article = article;
-        this.order = order;
+        this.order = article.getMyOrder();
     }
 
     @Override
@@ -148,6 +149,8 @@ public class EditQuantitiesDialogFragment extends DialogFragment {
     }
 
     private void showToast(String message) {
-        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
+        ((FragmentActivity)context).runOnUiThread(() -> {
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+        });
     }
 }

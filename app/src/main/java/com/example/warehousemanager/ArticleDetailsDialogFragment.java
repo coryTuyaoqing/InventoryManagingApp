@@ -16,13 +16,10 @@ public class ArticleDetailsDialogFragment extends DialogFragment {
     private Article article;
     private Context context;
     private Button editButton;
-    private Order order;
-    private Staff staff;
 
-    public ArticleDetailsDialogFragment(Article article, Context context, Order order) {
+    public ArticleDetailsDialogFragment(Article article, Context context) {
         this.article = article;
         this.context = context;
-        this.order  = order;
     }
 
     @Override
@@ -45,8 +42,7 @@ public class ArticleDetailsDialogFragment extends DialogFragment {
         TextView sizeTextView = view.findViewById(R.id.size_text_view);
         sizeTextView.setText("Size: " + article.getSize());
 
-        staff = Staff.getStaff(requireActivity().getApplicationContext());
-        staff.readFile();
+        Staff staff = Staff.getStaff(requireActivity().getApplicationContext());
 
         // Handle close button click
         Button closeButton = view.findViewById(R.id.Dialog_Back);
@@ -58,19 +54,21 @@ public class ArticleDetailsDialogFragment extends DialogFragment {
         });
 
         editButton = view.findViewById(R.id.EditQuantities);
-        toggleEditButtonVisibility();
+        toggleEditButtonVisibility(staff);
 
         return view;
     }
 
-    private void toggleEditButtonVisibility() {
+    private void toggleEditButtonVisibility(Staff staff) {
         int PermissionLevel = Integer.parseInt(staff.getPermission());
-        if (context instanceof SearchResultsActivity && PermissionLevel >= 2) {
+        if (context instanceof SearchResultsActivity && PermissionLevel >= 2 && article instanceof ArticleInOrder) {
+            //if context is SearchResultsActivity, then the article is definitely ArticleInOrder
+            ArticleInOrder articleInOrder = (ArticleInOrder)article;
             editButton.setVisibility(View.VISIBLE);
             editButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    showEditQuantitiesDialogFragment(article);
+                    showEditQuantitiesDialogFragment(articleInOrder);
                     dismiss();
                 }
             });
@@ -79,8 +77,8 @@ public class ArticleDetailsDialogFragment extends DialogFragment {
         }
     }
 
-    private void showEditQuantitiesDialogFragment(Article article) {
-        EditQuantitiesDialogFragment dialogFragment = new EditQuantitiesDialogFragment(context, article, order);
+    private void showEditQuantitiesDialogFragment(ArticleInOrder article) {
+        EditQuantitiesDialogFragment dialogFragment = new EditQuantitiesDialogFragment(context, article);
         dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "EditQuantitiesDialog");
     }
 }

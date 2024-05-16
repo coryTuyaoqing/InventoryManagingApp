@@ -136,4 +136,10 @@ public class SearchResultsActivity extends AppCompatActivity {
     private void displayNoResultsMessage() {
         Toast.makeText(this, "No results found", Toast.LENGTH_SHORT).show();
     }
+
+//    public void showEditQuantitiesDialogFragment(Article article, Order order){
+//        EditQuantitiesDialogFragment dialogFragment = new EditQuantitiesDialogFragment(this, article, order);
+//        dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "EditQuantitiesDialog");
+//
+//    }
 }

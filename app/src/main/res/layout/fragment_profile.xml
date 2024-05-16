@@ -9,41 +9,66 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="32dp"
-        android:gravity="center">
+        android:padding="10dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="60dp">
 
-        <ImageView
-            android:layout_width="160dp"
-            android:layout_height="160dp"
-            android:src="@drawable/ic_profile_round"
-            android:contentDescription="user_avatar"
-            android:id="@+id/imgProfileAvatar"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/rounded_corner_rectangle"
+            android:padding="10dp">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_profile_round"
+                android:contentDescription="user_avatar"
+                android:id="@+id/imgProfileAvatar"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="32sp"
+                    android:id="@+id/txtProfileName"
+                    android:text="@string/StaffName" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="32sp"
+                    android:id="@+id/txtProfileID"
+                    android:text="@string/StaffId"/>
+
+            </LinearLayout>
+
+
+
+        </LinearLayout>
+
+
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="32sp"
-            android:id="@+id/txtProfileID"
-            android:text=""/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="32sp"
+            android:textSize="24sp"
             android:id="@+id/txtProfilePermission"
-            android:text=""/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="32sp"
-            android:id="@+id/txtProfileName"
-            android:text=""/>
+            android:text="@string/StaffPermission"
+            android:layout_gravity="center_horizontal"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
             android:id="@+id/txtProfileEmail"
-            android:text=""/>
+            android:text="Email"
+            android:layout_gravity="center_horizontal"/>
 
         <Button
             android:layout_width="wrap_content"
@@ -59,7 +84,7 @@
             android:layout_height="wrap_content"
             android:text="@string/ManageStaffTitle" />
 
-
     </LinearLayout>
+
 
 </FrameLayout>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,7 @@ public class ScanResultActivity extends AppCompatActivity {
     String url;
     String barcodeNr;
     Button btnBackScanResult;
+    Article article;
     RecyclerView recyclerArticleScanResult, recyclerOrdersScanRelative;
     ArticleRecViewAdaptor articleRecViewAdaptor;
     OrderRecViewAdaptor orderRecViewAdaptor;
@@ -51,27 +53,31 @@ public class ScanResultActivity extends AppCompatActivity {
         @Override
         public void OrderOnClick(Order order) {
             //check if order is complete
-            Article article = articleRecViewAdaptor.getArticles().get(0);
-            Order.ArticleNr nr = order.getArticlesNrMap().get(article);
-            int inStockNr = nr.getInStockNr();
-            int requiredNr = nr.getRequiredNr();
-            if(inStockNr == requiredNr){
+            article = articleRecViewAdaptor.getArticles().get(0);
+            if(order.isComplete(article)){
                 Toast.makeText(ScanResultActivity.this, "The order is complete", Toast.LENGTH_SHORT).show();
-                return;
             }
 
-            OrderDetailsDialogFragment orderDetailsDialogFragment = new OrderDetailsDialogFragment(order);
-            orderDetailsDialogFragment.setAddView(layout -> { //add bottom to the dialog window for adding article
-                Button btnAddArticleToOrder = new Button(layout.getContext());
-                btnAddArticleToOrder.setText("Add article to\nthis order");
-                btnAddArticleToOrder.setOnClickListener(v -> {
-                    AddArticleDialogFragment addArticleDialogFragment = new AddArticleDialogFragment(order, article);
-                    addArticleDialogFragment.show(getSupportFragmentManager(), "add article to order");
-                    orderDetailsDialogFragment.dismiss();
-                });
-                layout.addView(btnAddArticleToOrder);
-            });
+            OrderDetailsDialogFragment orderDetailsDialogFragment = getOrderDetailsDialogFragment(order, article);
             orderDetailsDialogFragment.show(getSupportFragmentManager(), "OrderDetailsDialog");
         }
     };
+
+    private OrderDetailsDialogFragment getOrderDetailsDialogFragment(Order order, Article article) {
+        OrderDetailsDialogFragment orderDetailsDialogFragment = new OrderDetailsDialogFragment(order);
+        orderDetailsDialogFragment.setAddView(layout -> { //add bottom to the dialog window for adding article
+            if(order.isComplete(article))
+                return;
+
+            Button btnAddArticleToOrder = new Button(layout.getContext());
+            btnAddArticleToOrder.setText("Add article to\nthis order");
+            btnAddArticleToOrder.setOnClickListener(v -> {
+                AddArticleDialogFragment addArticleDialogFragment = new AddArticleDialogFragment(order, article);
+                addArticleDialogFragment.show(getSupportFragmentManager(), "add article to order");
+                orderDetailsDialogFragment.dismiss();
+            });
+            layout.addView(btnAddArticleToOrder);
+        });
+        return orderDetailsDialogFragment;
+    }
 }

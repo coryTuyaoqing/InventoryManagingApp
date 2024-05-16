@@ -69,6 +69,7 @@ public class Staff {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
+        readFile();
     }
 
     public void readFile(){

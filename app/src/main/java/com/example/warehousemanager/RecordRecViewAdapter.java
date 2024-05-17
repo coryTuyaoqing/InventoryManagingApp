@@ -57,7 +57,7 @@ public class RecordRecViewAdapter extends RecyclerView.Adapter<RecordRecViewAdap
             super(itemView);
             txtOrderId = itemView.findViewById(R.id.txtOrderId);
             txtArticleId = itemView.findViewById(R.id.txtArticleId);
-            txtArticleNr = itemView.findViewById(R.id.txtArticleNr);
+            txtArticleNr = itemView.findViewById(R.id.txtAdded);
             txtOperationTime = itemView.findViewById(R.id.txtOperationTime);
         }
     }

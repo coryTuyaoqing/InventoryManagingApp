@@ -1,7 +1,5 @@
 package com.example.warehousemanager;
 
-import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -27,21 +25,21 @@ public class Order {
     private LocalDate deadline;
     private String customer;
     private String responsible;
-    private int highlightedOrder;
-    private Map<Article,ArticleNr> articlesNrMap;
+    private boolean isHighlightedOrder;
+    private Map<ArticleInOrder,ArticleNr> articlesNrMap;
     private static final String TAG = "Order";
 
-    public Order(int orderID, LocalDate deadline, String description, String customer, String responsible, int highlightedOrder) {
+    public Order(int orderID, LocalDate deadline, String description, String customer, String responsible, int isHighlightedOrder) {
         this.orderID = orderID;
         this.description = description;
         this.deadline = deadline;
         this.customer = customer;
         this.responsible = responsible;
-        this.highlightedOrder = highlightedOrder;
+        this.isHighlightedOrder = (isHighlightedOrder == 1);
         this.articlesNrMap = new HashMap<>();
     }
 
-    public Order(int orderID, String description, LocalDate deadline, Map<Article, ArticleNr> articlesNrMap) {
+    public Order(int orderID, String description, LocalDate deadline, Map<ArticleInOrder, ArticleNr> articlesNrMap) {
         this.orderID = orderID;
         this.description = description;
         this.deadline = deadline;
@@ -59,13 +57,8 @@ public class Order {
     public LocalDate getDeadline() {
         return deadline;
     }
-    public boolean getHighlightedOrder() {
-        if(highlightedOrder == 1){
-            return true;
-        }
-        else{
-            return false;
-        }
+    public boolean isHighlighted() {
+        return isHighlightedOrder;
     }
     public String getResponsible() {
         return responsible;
@@ -75,21 +68,25 @@ public class Order {
         return customer;
     }
 
-    public Map<Article, ArticleNr> getArticlesNrMap() {
+    public void setHighlighted(boolean highlightedOrder) {
+        isHighlightedOrder = highlightedOrder;
+    }
+
+    public Map<ArticleInOrder, ArticleNr> getArticlesNrMap() {
         return articlesNrMap;
     }
 
-    public void putArticle(Article article, ArticleNr articleNr){
+    public void putArticle(ArticleInOrder article, ArticleNr articleNr){
         articlesNrMap.put(article, articleNr);
     }
 
-    public void putArticle(Article article, int requiredNr, int finishedNr){
+    public void putArticle(ArticleInOrder article, int requiredNr, int finishedNr){
         articlesNrMap.put(article, new ArticleNr(requiredNr, finishedNr));
     }
 
     public void getArticlesOfOrders(GetArticlesCallback callback) throws JSONException{
         OkHttpClient client = new OkHttpClient();
-        String url = DBConst.DB_URL + "get_articles_of_order/";
+        String url = DB.DB_URL + "get_articles_of_order/";
         Request request = new Request.Builder()
                 .url(url + getOrderID())
                 .build();

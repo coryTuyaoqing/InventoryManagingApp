@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,14 +35,14 @@ public class ScanResultActivity extends AppCompatActivity {
         recyclerArticleScanResult = findViewById(R.id.recyclerArticleScanResult);
 
         articleRecViewAdaptor = new ArticleRecViewAdaptor(this);
-        url = DBConst.DB_URL + "get_article_fromID/" + barcodeNr;
+        url = DB.DB_URL + "get_article_fromID/" + barcodeNr;
         articleRecViewAdaptor.getArticlesFromDB(url);
         recyclerArticleScanResult.setAdapter(articleRecViewAdaptor);
         recyclerArticleScanResult.setLayoutManager(new LinearLayoutManager(this));
 
         //customize order recycler view with customize order detail dialog fragment
         orderRecViewAdaptor = new OrderRecViewAdaptor(this, orderOnClickCallBack);
-        url = DBConst.DB_URL + "get_order_from_article/" + barcodeNr;
+        url = DB.DB_URL + "get_order_from_article/" + barcodeNr;
         orderRecViewAdaptor.getOrdersFromDB(url);
         recyclerOrdersScanRelative.setAdapter(orderRecViewAdaptor);
         recyclerOrdersScanRelative.setLayoutManager(new LinearLayoutManager(this));
@@ -64,7 +63,7 @@ public class ScanResultActivity extends AppCompatActivity {
     };
 
     private OrderDetailsDialogFragment getOrderDetailsDialogFragment(Order order, Article article) {
-        OrderDetailsDialogFragment orderDetailsDialogFragment = new OrderDetailsDialogFragment(order);
+        OrderDetailsDialogFragment orderDetailsDialogFragment = new OrderDetailsDialogFragment(order, this);
         orderDetailsDialogFragment.setAddView(layout -> { //add bottom to the dialog window for adding article
             if(order.isComplete(article))
                 return;

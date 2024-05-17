@@ -53,7 +53,7 @@ public class RegistrationActivity extends AppCompatActivity {
                 String newPassword = edtTxtSignupPassword.getText().toString();
                 String repeatPassword = edtTxtSignupPasswordConfirmation.getText().toString();
                 String companyEmail = newStaffName.toLowerCase() + "@warehouse.com";
-                String url = DBConst.DB_URL + "registration/" + newStaffName + "/" + newPassword + "/" + companyEmail;
+                String url = DB.DB_URL + "registration/" + newStaffName + "/" + newPassword + "/" + companyEmail;
 
                 if(newStaffName.isEmpty() || newPassword.isEmpty() || repeatPassword.isEmpty()){
                     Toast.makeText(RegistrationActivity.this, "Name and password shouldn't be empty.", Toast.LENGTH_LONG).show();

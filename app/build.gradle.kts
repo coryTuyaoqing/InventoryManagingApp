@@ -51,5 +51,6 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.google.zxing:core:3.5.3")
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
 }

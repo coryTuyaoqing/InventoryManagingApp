@@ -2,16 +2,20 @@ package com.example.warehousemanager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -36,7 +40,7 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
     private ArrayList<Order> orders;
     private CallBack callBack = order -> {
         // Create and show the dialog when the item is clicked
-        OrderDetailsDialogFragment dialogFragment = new OrderDetailsDialogFragment(order);
+        OrderDetailsDialogFragment dialogFragment = new OrderDetailsDialogFragment(order, context);
         dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "OrderDetailsDialog");
     }; //default callback function
     private static final String TAG = "OrderRecViewAdaptor";
@@ -45,9 +49,12 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
         this.context = context;
         this.orders = orders;
         for(Order order: orders){
-            order.getArticlesOfOrders(o -> {
-                if(context instanceof Activity){
-                    ((Activity)context).runOnUiThread(() -> notifyDataSetChanged());
+            order.getArticlesOfOrders(new Order.GetArticlesCallback() {
+                @Override
+                public void AfterGetArticles(Order order) {
+                    if(context instanceof Activity){
+                        ((Activity)context).runOnUiThread(() -> notifyDataSetChanged());
+                    }
                 }
             });
         }
@@ -63,9 +70,12 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
         this.orders = orders;
         this.callBack = callBack;
         for(Order order: orders){
-            order.getArticlesOfOrders(o -> {
-                if(context instanceof Activity){
-                    ((Activity)context).runOnUiThread(() -> notifyDataSetChanged());
+            order.getArticlesOfOrders(new Order.GetArticlesCallback() {
+                @Override
+                public void AfterGetArticles(Order order) {
+                    if(context instanceof Activity){
+                        ((Activity)context).runOnUiThread(() -> notifyDataSetChanged());
+                    }
                 }
             });
         }
@@ -97,7 +107,6 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Order order = orders.get(position);
-        Map<Article, Order.ArticleNr> articlesNrMap = order.getArticlesNrMap();
 
         holder.cardOrderItem.setOnClickListener(v -> callBack.OrderOnClick(order));
 
@@ -105,7 +114,7 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
         holder.txtOrderDescription.setText(order.getDescription());
         holder.txtArticles.setText("Deadline: " + order.getDeadline().toString());
 
-        ArticleRecViewAdaptor adaptor = new ArticleRecViewAdaptor(holder.itemView.getContext(), articlesNrMap);
+        ArticleRecViewAdaptor adaptor = new ArticleRecViewAdaptor(holder.itemView.getContext(), order);
         holder.recyclerArticlesInOrderItem.setAdapter(adaptor);
         holder.recyclerArticlesInOrderItem.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
     }
@@ -116,6 +125,7 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
     }
 
     public void getOrdersFromDB(String URL) {
+        orders = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(URL)
@@ -161,7 +171,7 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
         });
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView txtOrderDescription;
         private TextView txtArticles;
         private CardView cardOrderItem;

@@ -75,10 +75,10 @@ public class LoginActivity extends AppCompatActivity {
                 String url;
                 //check if the user use email or id to login
                 if(idOrEmail.chars().allMatch(Character::isDigit)){
-                    url = DBConst.DB_URL + "get_one_staff_id/" + idOrEmail;
+                    url = DB.DB_URL + "get_one_staff_id/" + idOrEmail;
                 }
                 else{
-                    url = DBConst.DB_URL + "get_one_staff_email/" + idOrEmail;
+                    url = DB.DB_URL + "get_one_staff_email/" + idOrEmail;
                 }
 
 

@@ -53,7 +53,7 @@ public class Article {
     public boolean equals(@Nullable Object obj) {
         if(obj == this)
             return true;
-        if(obj == null || getClass() != obj.getClass())
+        if(!(obj instanceof Article))
             return false;
         return ((Article)obj).getIdArticle() == getIdArticle();
     }

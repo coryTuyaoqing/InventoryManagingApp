@@ -110,12 +110,13 @@ public class LoginActivity extends AppCompatActivity {
                             String permission = responseObject.getString("permission");
                             String email = responseObject.getString("email");
                             String id = responseObject.getString("idStaff");
+                            String avatar = responseObject.getString("avatar");
 
                             if (userPassword.equals(realPassword)) {
                                 //if the password is correct: jump to main page and save user data
                                 Staff newStaff = Staff.getStaff(getApplicationContext());
                                 newStaff.initInfo();
-                                newStaff.writeInfo(id, name, permission, email);
+                                newStaff.writeInfo(id, name, permission, email, avatar);
 
                                 startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                 finish();

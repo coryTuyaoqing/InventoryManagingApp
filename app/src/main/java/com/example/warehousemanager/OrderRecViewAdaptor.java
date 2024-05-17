@@ -109,6 +109,13 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
         Order order = orders.get(position);
 
         holder.cardOrderItem.setOnClickListener(v -> callBack.OrderOnClick(order));
+        holder.cardOrderItem.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Toast.makeText(context, "long pressed", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
 
         // Bind order data to the views
         holder.txtOrderDescription.setText(order.getDescription());

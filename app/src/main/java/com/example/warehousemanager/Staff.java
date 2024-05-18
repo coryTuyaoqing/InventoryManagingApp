@@ -1,10 +1,18 @@
 package com.example.warehousemanager;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +21,12 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 //This is a singleton class!
 public class Staff {
@@ -118,5 +132,38 @@ public class Staff {
     public Bitmap getAvatarBitmap(){
         byte[] decodedBytes = Base64.decode(avatar, Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+    }
+
+    public void refreshInfoFromDB(){
+        OkHttpClient client = new OkHttpClient();
+        String url = DB.DB_URL + "get_one_staff_id/" + staffID;
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e(TAG, "onFailure: ", e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                try {
+                    assert response.body() != null;
+                    JSONArray responseArray = new JSONArray(response.body().string());
+                    JSONObject responseObject = responseArray.getJSONObject(0);
+                    String name = responseObject.getString("name");
+                    String permission = responseObject.getString("permission");
+                    String email = responseObject.getString("email");
+                    String id = responseObject.getString("idStaff");
+                    String avatar = responseObject.getString("avatar");
+                    staff.deleteFile();
+                    staff.initInfo();
+                    staff.writeInfo(id, name, permission, email, avatar);
+                } catch (JSONException e) {
+                    Log.e(TAG, "onResponse: JSONArray", e);
+                }
+            }
+        });
     }
 }

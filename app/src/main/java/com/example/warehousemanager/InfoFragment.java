@@ -5,6 +5,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ import okhttp3.Response;
 
 public class InfoFragment extends Fragment {
     private RecyclerView recyclerInfoRecentOrder;
+    private SwipeRefreshLayout swipeRefreshInfo;
     private RecordRecViewAdapter adapter;
     private ArrayList<Record> records;
 
@@ -36,6 +38,7 @@ public class InfoFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_info, container, false);
 
         recyclerInfoRecentOrder = view.findViewById(R.id.recyclerInfoRecentOrder);
+        swipeRefreshInfo = view.findViewById(R.id.swipeRefreshInfo);
         records = new ArrayList<>();
         adapter = new RecordRecViewAdapter(getContext(), records);
         recyclerInfoRecentOrder.setAdapter(adapter);
@@ -46,7 +49,21 @@ public class InfoFragment extends Fragment {
             fetchRecordsFromDB();
         }
 
+        swipeRefreshInfo.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchRecordsFromDB();
+                swipeRefreshInfo.setRefreshing(false);
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fetchRecordsFromDB();
     }
 
     private void fetchRecordsFromDB() {

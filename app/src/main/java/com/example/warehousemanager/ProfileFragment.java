@@ -137,7 +137,8 @@ public class ProfileFragment extends Fragment {
 
             @Override
             public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-
+//                Toast.makeText(getActivity(), "avatar upload success", Toast.LENGTH_SHORT).show();
+                staff.refreshInfoFromDB();
             }
         });
     }

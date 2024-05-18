@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -40,8 +41,10 @@ public class InfoFragment extends Fragment {
         recyclerInfoRecentOrder.setAdapter(adapter);
         recyclerInfoRecentOrder.setLayoutManager(new LinearLayoutManager(getContext()));
 
-
-        fetchRecordsFromDB();
+        // Fetch records only if the fragment is attached to an activity
+        if (isAdded()) {
+            fetchRecordsFromDB();
+        }
 
         return view;
     }
@@ -86,6 +89,8 @@ public class InfoFragment extends Fragment {
             }
         });
     }
+
+
 
     public void setRecords(int number) {
         Collections.sort(records, new Comparator<Record>() {

@@ -13,7 +13,7 @@ public class Record {
     private int articleNr;
     private String operationTime;
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.US);
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
     public Record(int idRecord, int idStaff, int idOrder, int idArticle, int articleNr, String operationTime) {
         this.idRecord = idRecord;
@@ -78,7 +78,7 @@ public class Record {
             return dateFormat.parse(operationTime);
         } catch (ParseException e) {
             e.printStackTrace();
-            return new Date(0); // return epoch date if parsing fails
+            return new Date(0);
         }
     }
 

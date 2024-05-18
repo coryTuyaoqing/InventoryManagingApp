@@ -44,10 +44,11 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
         articleNr = new ArrayList<>();
     }
 
-    public ArticleRecViewAdaptor(Context context, Map<Article, Order.ArticleNr> articlesNrMap) {
+    public ArticleRecViewAdaptor(Context context, Order order) {
         this.context = context;
-        articles = new ArrayList<>(articlesNrMap.keySet());
-        articleNr = new ArrayList<>(articlesNrMap.values());
+
+        articles = new ArrayList<>(order.getArticlesNrMap().keySet());
+        articleNr = new ArrayList<>(order.getArticlesNrMap().values());
     }
 
     public ArticleRecViewAdaptor(Context context){
@@ -102,7 +103,7 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
             int inStockNr = nr.getInStockNr();
             int requiredNr = nr.getRequiredNr();
 
-            if(inStockNr == requiredNr){
+            if(((ArticleInOrder)article).getMyOrder().isComplete(article)){
                 setBackgroundColor(holder.cardArticleItem, R.color.dark_color);
                 return;
             }
@@ -120,14 +121,13 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
 
         }
     }
+        @Override
+    public int getItemCount() {
+        return articles.size();
+    }
 
     private void setBackgroundColor(View view, int color) {
         ViewCompat.setBackgroundTintList(view, ColorStateList.valueOf(ContextCompat.getColor(context, color)));
-    }
-
-    @Override
-    public int getItemCount() {
-        return articles.size();
     }
 
     public void getArticlesFromDB(String url){

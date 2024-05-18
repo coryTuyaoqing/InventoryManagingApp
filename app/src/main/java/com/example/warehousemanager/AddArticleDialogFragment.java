@@ -100,7 +100,7 @@ public class AddArticleDialogFragment extends DialogFragment {
 
         int orderID = order.getOrderID();
         int articleID = article.getIdArticle();
-        String url = DBConst.DB_URL + "add_in_stock_number/" + addNr + "/" + orderID + "/" + articleID;
+        String url = DB.DB_URL + "add_in_stock_number/" + addNr + "/" + orderID + "/" + articleID;
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
@@ -127,7 +127,7 @@ public class AddArticleDialogFragment extends DialogFragment {
         Staff staff = Staff.getStaff(requireContext().getApplicationContext());
         String staffID = staff.getStaffID();
 
-        url = DBConst.DB_URL + "add_article_recode/" 
+        url = DB.DB_URL + "add_article_recode/"
                 + staffID + "/" 
                 + orderID + "/" 
                 +articleID + "/" 

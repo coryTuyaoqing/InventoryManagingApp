@@ -1,27 +1,48 @@
 package com.example.warehousemanager;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.ViewCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
+
+import java.io.IOException;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class OrderDetailsDialogFragment extends DialogFragment {
 
     private Order order;
+    private boolean orderWasHighlighted;
+    private Context context;
     private LinearLayout linearOrderDialog;
     private AddView addView = view -> {}; //add view callback function, by default doing nothing, use it when you want to change the ui of dialog window
+    private static final String TAG = "OrderDetailsDialogFragm";
 
-    public OrderDetailsDialogFragment(Order order) {
+    public OrderDetailsDialogFragment(Order order, Context context) {
         super();
         this.order = order;
+        this.context = context;
+        orderWasHighlighted = order.isHighlighted();
     }
 
     @Override
@@ -44,14 +65,37 @@ public class OrderDetailsDialogFragment extends DialogFragment {
         referenceTextView.setText("Reference: " + order.getDescription());
         customerTextView.setText("Customer: "+ order.getCustomer());
         responsibleTextView.setText("Responsible: "+ order.getResponsible());
-        highlightedOrderTextView.setText("Highlighted: "+ order.getHighlightedOrder());
+        highlightedOrderTextView.setText("Highlighted: "+ order.isHighlighted());
 
 
         // Handle close button click
         Button closeButton = view.findViewById(R.id.close_button);
         closeButton.setOnClickListener(v -> dismiss());
 
+        ImageButton btnHighLight = view.findViewById(R.id.btnHighLight);
+        if(order.isHighlighted()){
+            setBackgroundColor(btnHighLight, R.color.orange);
+        }
+
+        btnHighLight.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(order.isHighlighted()){
+                    setBackgroundColor(btnHighLight, android.R.color.transparent);
+                    order.setHighlighted(false);
+                }
+                else{
+                    setBackgroundColor(btnHighLight, R.color.orange);
+                    order.setHighlighted(true);
+                }
+            }
+        });
+
         return view;
+    }
+
+    private void setBackgroundColor(View view, int color) {
+        ViewCompat.setBackgroundTintList(view, ColorStateList.valueOf(ContextCompat.getColor(context, color)));
     }
 
     public void setAddView(AddView addView) {
@@ -60,5 +104,14 @@ public class OrderDetailsDialogFragment extends DialogFragment {
 
     public interface AddView{
         void addView(ViewGroup layout);
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        if(order.isHighlighted() != orderWasHighlighted){
+            String url = DB.DB_URL + "set_highlighted_order/" + (order.isHighlighted() ? 1 : 0) + "/" + order.getOrderID();
+            DB.httpRequest(url);
+        }
     }
 }

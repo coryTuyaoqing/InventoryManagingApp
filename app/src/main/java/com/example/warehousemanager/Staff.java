@@ -1,6 +1,9 @@
 package com.example.warehousemanager;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 
 import java.io.File;
@@ -17,6 +20,7 @@ public class Staff {
     private String name;
     private String permission;
     private String email;
+    private String avatar;
     private final File staffInfo;
     private static final String TAG = "Staff";
     private static Staff staff;
@@ -51,17 +55,18 @@ public class Staff {
         }
     }
 
-    public void writeInfo(String staffID, String name, String permission, String email){
+    public void writeInfo(String staffID, String name, String permission, String email, String avatar){
         FileOutputStream fos;
         try {
             fos = new FileOutputStream(staffInfo);
 
             try {
                 FileWriter writer = new FileWriter(fos.getFD());
-                writer.write(staffID + '\n');
-                writer.write(name  + '\n');
-                writer.write(permission  + '\n');
-                writer.write(email + '\n');
+                writer.write(staffID + '|');
+                writer.write(name  + '|');
+                writer.write(permission  + '|');
+                writer.write(email + '|');
+                writer.write(avatar + '|');
                 writer.close();
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -78,11 +83,13 @@ public class Staff {
             fis = new FileInputStream(staffInfo);
 
             Scanner scanner = new Scanner(fis);
+            scanner.useDelimiter("\\|"); // Set pipe as delimiter
             if(scanner.hasNext()){
                 staffID = scanner.next();
                 name = scanner.next();
                 permission = scanner.next();
                 email = scanner.next();
+                avatar = scanner.next();
             }
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
@@ -107,5 +114,9 @@ public class Staff {
 
     public String getEmail() {
         return email;
+    }
+    public Bitmap getAvatarBitmap(){
+        byte[] decodedBytes = Base64.decode(avatar, Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 }

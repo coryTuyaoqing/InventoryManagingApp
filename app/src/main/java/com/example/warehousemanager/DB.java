@@ -1,17 +1,10 @@
 package com.example.warehousemanager;
 
-import android.app.Activity;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.IOException;
-import java.time.LocalDate;
-import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -23,8 +16,6 @@ public class DB {
     private static final String TAG = "DB";
 
     public static final String DB_URL = "https://studev.groept.be/api/a23PT308/";
-    public enum PERMISSION {
-    }
     public static void httpRequest(String url){
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()

@@ -114,8 +114,10 @@ public class Order {
                         int articlesInStock = responseObject.getInt("articlesInStock");
                         double price;
                         try{price = responseObject.getDouble("Price");} catch (JSONException e){price = -1;}
-                        putArticle(new ArticleInOrder(articleID, name, supplierName, price, color, size, Order.this),
-                                new Order.ArticleNr(articleRequired, articlesInStock));
+                        putArticle(
+                                new ArticleInOrder(articleID, name, supplierName, price, color, size, Order.this),
+                                new Order.ArticleNr(articleRequired, articlesInStock)
+                        );
                     }
                     callback.AfterGetArticles(Order.this);
                 } catch (JSONException e) {

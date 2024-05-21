@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -35,7 +36,6 @@ public class OrderDetailsDialogFragment extends DialogFragment {
     private boolean orderWasHighlighted;
     private Context context;
     private LinearLayout linearOrderDialog;
-    private AddView addView = view -> {}; //add view callback function, by default doing nothing, use it when you want to change the ui of dialog window
     private static final String TAG = "OrderDetailsDialogFragm";
 
     public OrderDetailsDialogFragment(Order order, Context context) {
@@ -58,7 +58,7 @@ public class OrderDetailsDialogFragment extends DialogFragment {
         TextView highlightedOrderTextView = view.findViewById(R.id.highlighted_order_text_view);
 
         linearOrderDialog = view.findViewById(R.id.linearOrderDialog);
-        addView.addView(linearOrderDialog);
+        addView(linearOrderDialog);
 
         orderIdTextView.setText("Order ID: " + order.getOrderID());
         deadlineTextView.setText("Deadline: " + order.getDeadline());
@@ -94,16 +94,28 @@ public class OrderDetailsDialogFragment extends DialogFragment {
         return view;
     }
 
+    private void addView(ViewGroup viewGroup) {
+        if(context instanceof ScanResultActivity){
+            Article article = ((ScanResultActivity) context).getArticle();
+            if(order.isComplete(article)){
+                ((ScanResultActivity) context).runOnUiThread(() -> {
+                    Toast.makeText(context, "The order is complete", Toast.LENGTH_SHORT).show();
+                });
+                return;
+            }
+            Button btnAddArticleToOrder = new Button(viewGroup.getContext());
+            btnAddArticleToOrder.setText("Add article to\nthis order");
+            btnAddArticleToOrder.setOnClickListener(v -> {
+                AddArticleDialogFragment addArticleDialogFragment = new AddArticleDialogFragment(order, article);
+                addArticleDialogFragment.show(((ScanResultActivity) context).getSupportFragmentManager(), "add article to order");
+                dismiss();
+            });
+            viewGroup.addView(btnAddArticleToOrder);
+        }
+    }
+
     private void setBackgroundColor(View view, int color) {
         ViewCompat.setBackgroundTintList(view, ColorStateList.valueOf(ContextCompat.getColor(context, color)));
-    }
-
-    public void setAddView(AddView addView) {
-        this.addView = addView;
-    }
-
-    public interface AddView{
-        void addView(ViewGroup layout);
     }
 
     @Override

@@ -3,20 +3,15 @@ package com.example.warehousemanager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.ViewCompat;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,7 +23,6 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -40,9 +34,7 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
     private Context context;
     private ArrayList<Order> orders;
     private CallBack callBack = order -> {
-        // Create and show the dialog when the item is clicked
-        OrderDetailsDialogFragment dialogFragment = new OrderDetailsDialogFragment(order, context);
-        dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "OrderDetailsDialog");
+        // Create and show the dialog when the item is clicke
     }; //default callback function
     private static final String TAG = "OrderRecViewAdaptor";
 
@@ -109,19 +101,25 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Order order = orders.get(position);
 
-        holder.cardOrderItem.setOnClickListener(v -> callBack.OrderOnClick(order));
-        holder.cardOrderItem.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                Toast.makeText(context, "long pressed", Toast.LENGTH_SHORT).show();
-                context.startActivity(new Intent(context, OrderTableActivity.class));
-                return true;
+        holder.cardOrderItem.setOnClickListener(v -> {
+            OrderDetailsDialogFragment dialogFragment = new OrderDetailsDialogFragment(order, context);
+            dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "OrderDetailsDialog");
+        });
+
+        holder.cardOrderItem.setOnLongClickListener(v -> {
+            if(context instanceof OrderTableActivity){
+                return false;
             }
+            Toast.makeText(context, "long pressed", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(context, OrderTableActivity.class);
+            intent.putExtra("orderID", order.getOrderID());
+            context.startActivity(intent);
+            return true;
         });
 
         // Bind order data to the views
         holder.txtOrderDescription.setText(order.getDescription());
-        holder.txtArticles.setText("Deadline: " + order.getDeadline().toString());
+        holder.txtDeadline.setText("Deadline: " + order.getDeadline().toString());
 
         ArticleRecViewAdaptor adaptor = new ArticleRecViewAdaptor(holder.itemView.getContext(), order);
         holder.recyclerArticlesInOrderItem.setAdapter(adaptor);
@@ -182,14 +180,14 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView txtOrderDescription;
-        private TextView txtArticles;
+        private TextView txtDeadline;
         private CardView cardOrderItem;
         private RecyclerView recyclerArticlesInOrderItem;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             txtOrderDescription = itemView.findViewById(R.id.txt_order_description);
-            txtArticles = itemView.findViewById(R.id.txt_articles);
+            txtDeadline = itemView.findViewById(R.id.txt_deadline);
             cardOrderItem = itemView.findViewById(R.id.order_list_item_parent);
             recyclerArticlesInOrderItem = itemView.findViewById(R.id.recyclerArticlesInOrderItem);
         }

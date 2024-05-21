@@ -2,6 +2,7 @@ package com.example.warehousemanager;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -113,6 +114,7 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
             @Override
             public boolean onLongClick(View v) {
                 Toast.makeText(context, "long pressed", Toast.LENGTH_SHORT).show();
+                context.startActivity(new Intent(context, OrderTableActivity.class));
                 return true;
             }
         });

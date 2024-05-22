@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
@@ -44,7 +46,7 @@ public class RecordRecViewAdapter extends RecyclerView.Adapter<RecordRecViewAdap
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Record record = records.get(position);
 
         // Set the record data
@@ -53,6 +55,22 @@ public class RecordRecViewAdapter extends RecyclerView.Adapter<RecordRecViewAdap
 
         // Fetch and set order and article information
         fetchOrderAndArticleInfo(record, holder);
+
+        // Set the click listener for opening Article detail
+        holder.articlesCardView.setOnClickListener(v -> {
+            if (holder.article != null) {
+                ArticleDetailsDialogFragment dialogFragment = new ArticleDetailsDialogFragment(holder.article, context);
+                dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "ArticleDetailsDialog");
+            }
+        });
+
+        // Set the click listener for opening Order detail
+        holder.orderCardView.setOnClickListener(v -> {
+            if (holder.order != null) {
+                OrderDetailsDialogFragment dialogFragment = new OrderDetailsDialogFragment(holder.order, context);
+                dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "OrderDetailsDialog");
+            }
+        });
     }
 
     @Override
@@ -70,6 +88,13 @@ public class RecordRecViewAdapter extends RecyclerView.Adapter<RecordRecViewAdap
         public TextView txtArticleName;
         public TextView txtArticleInfo;
 
+        public Article article;
+        public CardView articlesCardView;
+
+        public Order order;
+        public CardView orderCardView;
+
+
         public ViewHolder(View itemView) {
             super(itemView);
             txtOrderId = itemView.findViewById(R.id.txtOrderId);
@@ -80,6 +105,8 @@ public class RecordRecViewAdapter extends RecyclerView.Adapter<RecordRecViewAdap
             txtOrderDeadline = itemView.findViewById(R.id.txt_deadline);
             txtArticleName = itemView.findViewById(R.id.txt_article_name);
             txtArticleInfo = itemView.findViewById(R.id.txt_articles_info);
+            articlesCardView = itemView.findViewById(R.id.articles_list_parent);
+            orderCardView = itemView.findViewById(R.id.order_list_item_parent);
         }
     }
 
@@ -112,6 +139,7 @@ public class RecordRecViewAdapter extends RecyclerView.Adapter<RecordRecViewAdap
                     String size = responseObject.getString("size");
 
                     Article article = new Article(record.getIdArticle(), name, supplierName, price, color, size);
+                    holder.article = article;
 
                     ((Activity) context).runOnUiThread(() -> {
                         holder.txtArticleName.setText("Article Name: " + article.getArticleName());
@@ -145,6 +173,7 @@ public class RecordRecViewAdapter extends RecyclerView.Adapter<RecordRecViewAdap
                     int highlightedOrder = responseObject.getInt("HighlightedOrder");
 
                     Order order = new Order(orderId, deadline, description, customer, responsible, highlightedOrder);
+                    holder.order = order;
 
                     ((Activity) context).runOnUiThread(() -> {
                         holder.txtOrderDescription.setText("Order Description: " + order.getDescription());

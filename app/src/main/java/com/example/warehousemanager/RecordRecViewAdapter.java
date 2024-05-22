@@ -4,6 +4,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,6 +71,12 @@ public class RecordRecViewAdapter extends RecyclerView.Adapter<RecordRecViewAdap
                 OrderDetailsDialogFragment dialogFragment = new OrderDetailsDialogFragment(holder.order, context);
                 dialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "OrderDetailsDialog");
             }
+        });
+        holder.orderCardView.setOnLongClickListener(v -> {
+            Intent intent = new Intent(context, OrderTableActivity.class);
+            intent.putExtra("orderID", record.getIdOrder());
+            context.startActivity(intent);
+            return true;
         });
     }
 

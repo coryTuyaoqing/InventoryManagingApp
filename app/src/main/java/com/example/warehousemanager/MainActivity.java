@@ -3,6 +3,7 @@ package com.example.warehousemanager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultCallback;
@@ -17,6 +18,7 @@ import com.journeyapps.barcodescanner.ScanIntentResult;
 import com.journeyapps.barcodescanner.ScanOptions;
 
 public class MainActivity extends AppCompatActivity {
+    Button btnWorkSpace;
     BottomNavigationView navigationView;
     FloatingActionButton btnScan;
     @Override
@@ -51,6 +53,17 @@ public class MainActivity extends AppCompatActivity {
             options.setPrompt("Scan something");
             options.setOrientationLocked(true);
             barcodeLauncher.launch(options);
+        });
+
+        btnWorkSpace = findViewById(R.id.btnWorkSpace);
+        btnWorkSpace.setOnClickListener(v -> {
+            if(OrderTableActivity.orderID == -1){
+                Toast.makeText(MainActivity.this, "No order in workspace yet", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            Intent intent = new Intent(MainActivity.this, OrderTableActivity.class);
+            intent.putExtra("orderID", OrderTableActivity.orderID);
+            startActivity(intent);
         });
     }
 

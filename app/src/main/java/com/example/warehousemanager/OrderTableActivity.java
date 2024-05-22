@@ -33,12 +33,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class OrderTableActivity extends AppCompatActivity implements AbleToAddArticle{
-    int orderID;
-    Article article;
-    RecyclerView recyclerOrderTable;
-    FloatingActionButton fabOrderTable;
-    OrderRecViewAdaptor orderRecViewAdaptor;
-    ProgressBar progressBarOrderTable;
+    public static int orderID = -1;
+    private Article article;
+    private RecyclerView recyclerOrderTable;
+    private FloatingActionButton fabOrderTable;
+    private OrderRecViewAdaptor orderRecViewAdaptor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +48,6 @@ public class OrderTableActivity extends AppCompatActivity implements AbleToAddAr
 
         recyclerOrderTable = findViewById(R.id.recyclerOrderTable);
         fabOrderTable = findViewById(R.id.fabOrderTable);
-        progressBarOrderTable = findViewById(R.id.progressBarOrderTable);
 
         orderRecViewAdaptor = new OrderRecViewAdaptor(this);
         String url = DB.DB_URL + "get_order_fromID/" + orderID;

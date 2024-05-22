@@ -131,6 +131,7 @@ public class ArticleRecViewAdaptor extends RecyclerView.Adapter<ArticleRecViewAd
     }
 
     public void getArticlesFromDB(String url){
+        articles = new ArrayList<>();
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)

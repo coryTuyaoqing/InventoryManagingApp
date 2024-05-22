@@ -33,7 +33,6 @@ import okhttp3.Response;
 public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdaptor.ViewHolder> {
     private Context context;
     private ArrayList<Order> orders;
-    private CallBack callBack = order -> {};
     private static final String TAG = "OrderRecViewAdaptor";
 
     public OrderRecViewAdaptor(Context context, ArrayList<Order> orders) throws JSONException {
@@ -54,28 +53,6 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
     public OrderRecViewAdaptor(Context context) {
         this.context = context;
         orders = new ArrayList<>();
-    }
-
-    public OrderRecViewAdaptor(Context context, ArrayList<Order> orders, CallBack callBack) throws JSONException {
-        this.context = context;
-        this.orders = orders;
-        this.callBack = callBack;
-        for(Order order: orders){
-            order.getArticlesOfOrders(new Order.GetArticlesCallback() {
-                @Override
-                public void AfterGetArticles(Order order) {
-                    if(context instanceof Activity){
-                        ((Activity)context).runOnUiThread(() -> notifyDataSetChanged());
-                    }
-                }
-            });
-        }
-    }
-
-    public OrderRecViewAdaptor(Context context, CallBack callBack) {
-        this.context = context;
-        orders = new ArrayList<>();
-        this.callBack = callBack;
     }
 
     public void setOrders(ArrayList<Order> orders) {
@@ -189,9 +166,5 @@ public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdapto
             cardOrderItem = itemView.findViewById(R.id.order_list_item_parent);
             recyclerArticlesInOrderItem = itemView.findViewById(R.id.recyclerArticlesInOrderItem);
         }
-    }
-
-    public interface CallBack {
-        void OrderOnClick(Order order);
     }
 }

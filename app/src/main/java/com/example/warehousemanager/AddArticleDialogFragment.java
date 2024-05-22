@@ -1,5 +1,6 @@
 package com.example.warehousemanager;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -119,7 +121,13 @@ public class AddArticleDialogFragment extends DialogFragment {
                     Toast.makeText(getActivity(), "add successfully", Toast.LENGTH_SHORT).show();
                     dismiss();
                 });
-                requireActivity().finish();
+//                requireActivity().finish();
+                Context context = getActivity();
+                if(context instanceof AbleToAddArticle){
+                    ((FragmentActivity) context).runOnUiThread(() -> {
+                        ((AbleToAddArticle) context).notifyDataSetChanged();
+                    });
+                }
             }
         });
 

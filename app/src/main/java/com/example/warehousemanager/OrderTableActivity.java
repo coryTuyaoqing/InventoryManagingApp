@@ -33,6 +33,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class OrderTableActivity extends AppCompatActivity implements AbleToAddArticle{
+    int orderID;
     Article article;
     RecyclerView recyclerOrderTable;
     FloatingActionButton fabOrderTable;
@@ -44,7 +45,7 @@ public class OrderTableActivity extends AppCompatActivity implements AbleToAddAr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_table);
         Intent intent = getIntent();
-        int orderID = intent.getIntExtra("orderID", -1);
+        orderID = intent.getIntExtra("orderID", -1);
 
         recyclerOrderTable = findViewById(R.id.recyclerOrderTable);
         fabOrderTable = findViewById(R.id.fabOrderTable);
@@ -87,6 +88,11 @@ public class OrderTableActivity extends AppCompatActivity implements AbleToAddAr
     @Override
     public Article getArticle() {
         return article;
+    }
+
+    @Override
+    public void notifyDataSetChanged() {
+        orderRecViewAdaptor.getOrdersFromDB(DB.DB_URL + "get_order_fromID/" + orderID);
     }
 
     public void getArticleFromID(String articleID){

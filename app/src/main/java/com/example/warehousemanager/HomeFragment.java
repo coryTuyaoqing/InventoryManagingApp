@@ -33,6 +33,7 @@ public class HomeFragment extends Fragment {
         swipeRefreshHome = view.findViewById(R.id.swipRefreshHome);
         swipeRefreshHome.setOnRefreshListener(() -> {
             adaptor.getOrdersFromDB(url);
+            while (adaptor.getOrders().isEmpty()){}
             swipeRefreshHome.setRefreshing(false);
         });
 

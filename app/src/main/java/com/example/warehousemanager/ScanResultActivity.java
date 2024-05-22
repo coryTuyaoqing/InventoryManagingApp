@@ -51,4 +51,10 @@ public class ScanResultActivity extends AppCompatActivity implements AbleToAddAr
     public Article getArticle() {
         return articleRecViewAdaptor.getArticles().get(0);
     }
+
+    @Override
+    public void notifyDataSetChanged(){
+        orderRecViewAdaptor.getOrdersFromDB(DB.DB_URL + "get_order_from_article/" + barcodeNr);
+        articleRecViewAdaptor.getArticlesFromDB(DB.DB_URL + "get_article_fromID/" + barcodeNr);
+    }
 }

@@ -33,9 +33,7 @@ import okhttp3.Response;
 public class OrderRecViewAdaptor extends RecyclerView.Adapter<OrderRecViewAdaptor.ViewHolder> {
     private Context context;
     private ArrayList<Order> orders;
-    private CallBack callBack = order -> {
-        // Create and show the dialog when the item is clicke
-    }; //default callback function
+    private CallBack callBack = order -> {};
     private static final String TAG = "OrderRecViewAdaptor";
 
     public OrderRecViewAdaptor(Context context, ArrayList<Order> orders) throws JSONException {

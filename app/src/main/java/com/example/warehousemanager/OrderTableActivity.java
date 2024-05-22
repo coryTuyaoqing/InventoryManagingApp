@@ -24,6 +24,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -37,7 +38,6 @@ public class OrderTableActivity extends AppCompatActivity implements AbleToAddAr
     FloatingActionButton fabOrderTable;
     OrderRecViewAdaptor orderRecViewAdaptor;
     ProgressBar progressBarOrderTable;
-    private static final String TAG = "OrderTableActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,17 +74,12 @@ public class OrderTableActivity extends AppCompatActivity implements AbleToAddAr
                     } else {
                         Toast.makeText(OrderTableActivity.this, "scanned: " + o.getContents(), Toast.LENGTH_SHORT).show();
                         Order order = orderRecViewAdaptor.getOrders().get(0);
-                        getArticleFromID(Integer.parseInt(o.getContents()));
-                        progressBarOrderTable.setVisibility(View.VISIBLE);
-                        new Thread(() -> {
-                            while(article == null){
-                                //progress bar
-                            }
-                            runOnUiThread(() -> progressBarOrderTable.setVisibility(View.GONE));
-                            //article must be prepared before these code
-                            OrderDetailsDialogFragment orderDetailsDialogFragment = new OrderDetailsDialogFragment(order, OrderTableActivity.this);
-                            orderDetailsDialogFragment.show(getSupportFragmentManager(), "tag");
-                        }).start();
+                        getArticleFromID(o.getContents());
+                        if(article == null){
+                            return;
+                        }
+                        OrderDetailsDialogFragment orderDetailsDialogFragment = new OrderDetailsDialogFragment(order, OrderTableActivity.this);
+                        orderDetailsDialogFragment.show(getSupportFragmentManager(), "tag");
                     }
                 }
             });
@@ -94,39 +89,16 @@ public class OrderTableActivity extends AppCompatActivity implements AbleToAddAr
         return article;
     }
 
-    public void getArticleFromID(int articleID){
+    public void getArticleFromID(String articleID){
+        Order order = orderRecViewAdaptor.getOrders().get(0);
+        ArrayList<Article> articles = new ArrayList<>(order.getArticlesNrMap().keySet());
+        for(Article a: articles){
+            if(articleID.equals(String.valueOf(a.getIdArticle()))){
+                article = a;
+                return;
+            }
+        }
+        Toast.makeText(this, "No article found", Toast.LENGTH_SHORT).show();
         article = null;
-        String url = DB.DB_URL + "get_article_fromID/" + articleID;
-        OkHttpClient client = new OkHttpClient();
-        Request request = new Request.Builder()
-                .url(url)
-                .build();
-
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NonNull Call call, @NonNull IOException e) {
-                Log.e(TAG, "onFailure: ", e);
-            }
-
-            @Override
-            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
-                Log.d(TAG, "onResponse: ");
-                try{
-                    assert response.body() != null;
-                    JSONArray responseArray = new JSONArray(response.body().string());
-                    JSONObject responseObject = responseArray.getJSONObject(0);
-                    int articleID = responseObject.getInt("idArticle");
-                    String name = responseObject.getString("name");
-                    String supplierName = responseObject.getString("SupplierName");
-                    double price = responseObject.getDouble("Price");
-                    String color = responseObject.getString("color");
-                    String size = responseObject.getString("size");
-                    article = new Article(articleID, name, supplierName, price, color, size);
-                }
-                catch (JSONException e){
-                    Log.e(TAG, "onResponse: parsing", e);
-                }
-            }
-        });
     }
 }

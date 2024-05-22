@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class ScanResultActivity extends AppCompatActivity {
+public class ScanResultActivity extends AppCompatActivity implements AbleToAddArticle{
     String url;
     String barcodeNr;
     Button btnBackScanResult;
@@ -46,6 +46,8 @@ public class ScanResultActivity extends AppCompatActivity {
         recyclerOrdersScanRelative.setLayoutManager(new LinearLayoutManager(this));
     }
 
+
+    @Override
     public Article getArticle() {
         return articleRecViewAdaptor.getArticles().get(0);
     }

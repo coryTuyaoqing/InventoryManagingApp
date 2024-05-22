@@ -1,6 +1,7 @@
 package com.example.warehousemanager;
 
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -10,6 +11,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -135,6 +137,75 @@ public class Order {
         return inStockNr == requiredNr;
     }
 
+//    private void addArticleToOrder(Article article, int addNr) {
+//        Log.d(TAG, "addArticleToOrder: ");
+//        //check if in stock number exceed required number
+//        Order.ArticleNr nr = getArticlesNrMap().get(article);
+//        if(nr == null){
+//            return;
+//        }
+//        int inStockNr = nr.getInStockNr();
+//        int requiredNr = nr.getRequiredNr();
+//
+//        if(inStockNr + addNr > requiredNr){
+//            requireActivity().runOnUiThread(() -> {
+//                Toast.makeText(getActivity(), "only " + (requiredNr - inStockNr) + " more can be added", Toast.LENGTH_SHORT).show();
+//            });
+//            return;
+//        }
+//
+//        int orderID = getOrderID();
+//        int articleID = article.getIdArticle();
+//        String url = DB.DB_URL + "add_in_stock_number/" + addNr + "/" + orderID + "/" + articleID;
+//        OkHttpClient client = new OkHttpClient();
+//        Request request = new Request.Builder()
+//                .url(url)
+//                .build();
+//
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+//                Log.e(TAG, "onFailure: ", e);
+//            }
+//
+//            @Override
+//            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+//                Log.d(TAG, "onResponse: ");
+//                requireActivity().runOnUiThread(() -> {
+//                    Toast.makeText(getActivity(), "add successfully", Toast.LENGTH_SHORT).show();
+//                    dismiss();
+//                });
+//                requireActivity().finish();
+//            }
+//        });
+//
+//        //record add article
+//        Staff staff = Staff.getStaff(requireContext().getApplicationContext());
+//        String staffID = staff.getStaffID();
+//
+//        url = DB.DB_URL + "add_article_recode/"
+//                + staffID + "/"
+//                + orderID + "/"
+//                +articleID + "/"
+//                + addNr + "/"
+//                + LocalDate.now().toString() + "+" + LocalTime.now().toString();
+//        request = new Request.Builder()
+//                .url(url)
+//                .build();
+//
+//        client.newCall(request).enqueue(new Callback() {
+//            @Override
+//            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+//                Log.e(TAG, "onFailure: ", e);
+//            }
+//
+//            @Override
+//            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+//                Log.d(TAG, "onResponse: ");
+//            }
+//        });
+//    }
+
     public static class ArticleNr{
         private int requiredNr;
         private int inStockNr;
@@ -156,6 +227,7 @@ public class Order {
             this.inStockNr = inStockNr;
         }
     }
+
     public interface GetArticlesCallback{
         void AfterGetArticles(Order order);
     }

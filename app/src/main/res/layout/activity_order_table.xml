@@ -1,18 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
-    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".OrderTableActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
+    <ProgressBar
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/recyclerOrderTable"/>
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:visibility="gone"
+        android:id="@+id/progressBarOrderTable"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/white"/>
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerOrderTable"/>
+
+    </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabOrderTable"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="scan button"
+        android:src="@drawable/ic_qrcode_scanner"
+        app:backgroundTint="@color/white"
+        android:layout_margin="30dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"/>
 
 
-
-
-</LinearLayout>
+</RelativeLayout>

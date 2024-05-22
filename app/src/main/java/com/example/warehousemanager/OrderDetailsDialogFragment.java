@@ -1,5 +1,6 @@
 package com.example.warehousemanager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
@@ -17,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.core.view.ViewCompat;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
 
 public class OrderDetailsDialogFragment extends DialogFragment {
 
@@ -46,7 +48,7 @@ public class OrderDetailsDialogFragment extends DialogFragment {
         TextView highlightedOrderTextView = view.findViewById(R.id.highlighted_order_text_view);
 
         linearOrderDialog = view.findViewById(R.id.linearOrderDialog);
-        addView(linearOrderDialog);
+        addView();
 
         orderIdTextView.setText("Order ID: " + order.getOrderID());
         deadlineTextView.setText("Deadline: " + order.getDeadline());
@@ -82,23 +84,26 @@ public class OrderDetailsDialogFragment extends DialogFragment {
         return view;
     }
 
-    private void addView(ViewGroup viewGroup) {
-        if(context instanceof ScanResultActivity){
-            Article article = ((ScanResultActivity) context).getArticle();
+    private void addView() {
+        if(context instanceof AbleToAddArticle){
+            Article article = ((AbleToAddArticle) context).getArticle();
+            if(article == null){
+                return;
+            }
             if(order.isComplete(article)){
-                ((ScanResultActivity) context).runOnUiThread(() -> {
+                ((FragmentActivity) context).runOnUiThread(() -> {
                     Toast.makeText(context, "The order is complete", Toast.LENGTH_SHORT).show();
                 });
                 return;
             }
-            Button btnAddArticleToOrder = new Button(viewGroup.getContext());
+            Button btnAddArticleToOrder = new Button(linearOrderDialog.getContext());
             btnAddArticleToOrder.setText("Add article to\nthis order");
             btnAddArticleToOrder.setOnClickListener(v -> {
                 AddArticleDialogFragment addArticleDialogFragment = new AddArticleDialogFragment(order, article);
-                addArticleDialogFragment.show(((ScanResultActivity) context).getSupportFragmentManager(), "add article to order");
+                addArticleDialogFragment.show(((FragmentActivity) context).getSupportFragmentManager(), "add article to order");
                 dismiss();
             });
-            viewGroup.addView(btnAddArticleToOrder);
+            linearOrderDialog.addView(btnAddArticleToOrder);
         }
     }
 

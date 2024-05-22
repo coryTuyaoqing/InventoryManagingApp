@@ -1,8 +1,14 @@
 package com.example.warehousemanager;
 
+import android.app.Activity;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 
@@ -16,8 +22,8 @@ public class DB {
     private static final String TAG = "DB";
 
     public static final String DB_URL = "https://studev.groept.be/api/a23PT308/";
+    private static final OkHttpClient client = new OkHttpClient();
     public static void httpRequest(String url){
-        OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(url)
                 .build();
@@ -34,4 +40,7 @@ public class DB {
         });
     }
 
+    public static void getArticleByID(int articleID, Article article){
+
+    }
 }

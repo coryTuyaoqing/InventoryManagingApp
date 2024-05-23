@@ -53,6 +53,7 @@ public class RecordRecViewAdapter extends RecyclerView.Adapter<RecordRecViewAdap
         // Set the record data
         holder.txtArticleNr.setText("Added: " + record.getArticleNr());
         holder.txtOperationTime.setText("Time of addition: " + record.getFormattedOperationTime());
+        getStaffName(holder, record);
 
         // Fetch and set order and article information
         fetchOrderAndArticleInfo(record, holder);
@@ -80,6 +81,37 @@ public class RecordRecViewAdapter extends RecyclerView.Adapter<RecordRecViewAdap
         });
     }
 
+    private String getStaffName(ViewHolder holder, Record record) {
+        int staffID = record.getIdStaff();
+        OkHttpClient client = new OkHttpClient();
+        Request request = new Request.Builder()
+                .url(DB.DB_URL + "get_staff_from_id/" + staffID)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NonNull Call call, @NonNull IOException e) {
+                Log.e(TAG, "onFailure: ", e);
+            }
+
+            @Override
+            public void onResponse(@NonNull Call call, @NonNull Response response) throws IOException {
+                try {
+                    assert response.body() != null;
+                    JSONArray responseArray = new JSONArray(response.body().string());
+                    JSONObject responseObject = responseArray.getJSONObject(0);
+                    String name = responseObject.getString("name");
+                    ((FragmentActivity)context).runOnUiThread(() -> {
+                        holder.txtStaff.setText("Staff: " + name);
+                    });
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        return null;
+    }
+
     @Override
     public int getItemCount() {
         return records.size();
@@ -94,6 +126,7 @@ public class RecordRecViewAdapter extends RecyclerView.Adapter<RecordRecViewAdap
         public TextView txtOrderDeadline;
         public TextView txtArticleName;
         public TextView txtArticleInfo;
+        public TextView txtStaff;
 
         public Article article;
         public CardView articlesCardView;
@@ -114,6 +147,7 @@ public class RecordRecViewAdapter extends RecyclerView.Adapter<RecordRecViewAdap
             txtArticleInfo = itemView.findViewById(R.id.txt_articles_info);
             articlesCardView = itemView.findViewById(R.id.articles_list_parent);
             orderCardView = itemView.findViewById(R.id.order_list_item_parent);
+            txtStaff = itemView.findViewById(R.id.txtStaff);
         }
     }
 

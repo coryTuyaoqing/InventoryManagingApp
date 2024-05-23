@@ -27,6 +27,7 @@
         <item>ID</item>
         <item>deadline</item>
         <item>reference</item>
+        <item>responsible</item>
     </string-array>
     <string-array name="filter_article">
         <item>ID</item>

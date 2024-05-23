@@ -118,6 +118,7 @@ public class SearchFragment extends Fragment {
 
             CheckBox checkBox = new CheckBox(getContext());
             checkBox.setText(filter);
+            checkBox.setButtonDrawable(R.drawable.custom_checkbox); // Apply custom drawable
             checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -136,6 +137,7 @@ public class SearchFragment extends Fragment {
             }
         }
     }
+
 
     private void clearFilters() {
         LinearLayout filterOptionsLayout = requireView().findViewById(R.id.FIlters);
